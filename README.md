@@ -2,7 +2,44 @@
 
 Starter Full-Stack para una landing + registro de torneo de E-Sports estilo **Valorant Gaming Premium**.
 
-## Stack
+## Valorant Tournament — Starter
+
+Plantilla de aplicación Next.js para gestionar torneos de Valorant.
+
+Resumen
+- Proyecto con Next.js + Drizzle ORM + Supabase (configuración inicial).
+
+Requisitos
+- Node.js 18+ (recomendado 20)
+- pnpm
+
+Instalación
+1. Copia `.env.example` a `.env.local` y completa las variables sensibles.
+2. Instala dependencias:
+
+```bash
+pnpm install
+```
+
+Ejecución en desarrollo
+
+```bash
+pnpm dev
+```
+
+Build y producción
+
+```bash
+pnpm build
+pnpm start
+```
+
+Notas de seguridad
+- No subas archivos con credenciales. Esta plantilla ya incluye `.env*.local` en `.gitignore`.
+
+Contribuciones
+- Abre un PR desde una rama descriptiva. Revisa las issues antes de comenzar.
+
 
 - Next.js App Router + React Server Components + Server Actions
 - Tailwind CSS v4, shadcn-style UI, Motion
