@@ -1,0 +1,13 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#070707"/>
+  <circle cx="220" cy="120" r="360" fill="#ff4655" fill-opacity="0.24"/>
+  <circle cx="990" cy="90" r="280" fill="#ff7a1a" fill-opacity="0.14"/>
+  <path d="M0 505L1200 408V630H0V505Z" fill="#111111"/>
+  <path d="M86 90H1114V530H86V90Z" stroke="#ff4655" stroke-width="2" stroke-opacity="0.45"/>
+  <path d="M150 150H1050V470H150V150Z" stroke="white" stroke-opacity="0.08"/>
+  <text x="150" y="258" fill="#f4f4f5" font-family="Arial, sans-serif" font-size="76" font-weight="900" letter-spacing="8">VALORANT</text>
+  <text x="150" y="346" fill="#ff4655" font-family="Arial, sans-serif" font-size="92" font-weight="900" letter-spacing="6">IGNITION CUP</text>
+  <text x="154" y="415" fill="#a1a1aa" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="6">REGISTRO COMPETITIVO · 5V5 · LAN/LATAM</text>
+  <rect x="150" y="458" width="252" height="54" fill="#ff4655"/>
+  <text x="180" y="494" fill="white" font-family="Arial, sans-serif" font-size="22" font-weight="900" letter-spacing="4">LOCK IN</text>
+</svg>
