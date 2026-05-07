@@ -37,19 +37,19 @@ export type MatchAdvancement = {
 
 export function resolveMatchAdvancement(match: AdvancementMatchInput): MatchAdvancement {
   if (match.status !== "reported") {
-    throw new Error("Only reported matches can be advanced.");
+    throw new Error("Solo las partidas reportadas pueden avanzar.");
   }
 
   if (!match.teamAId || !match.teamBId) {
-    throw new Error("Match advancement requires two teams.");
+    throw new Error("El avance de partida requiere dos equipos.");
   }
 
   if (!match.winnerTeamId) {
-    throw new Error("Reported match requires a winner.");
+    throw new Error("La partida reportada necesita un ganador.");
   }
 
   if (match.winnerTeamId !== match.teamAId && match.winnerTeamId !== match.teamBId) {
-    throw new Error("Winner must be one of the match teams.");
+    throw new Error("El ganador debe ser uno de los equipos de la partida.");
   }
 
   const loserTeamId = match.winnerTeamId === match.teamAId ? match.teamBId : match.teamAId;

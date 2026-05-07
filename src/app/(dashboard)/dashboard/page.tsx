@@ -16,12 +16,12 @@ import { getTeamTournamentHistory, getTeamTournamentStanding } from "@/features/
 import { getCaptainMission } from "@/features/tournaments/queries";
 
 const agentProfiles = [
-  ["Duelist", "Kraken"],
-  ["Initiator", "Rift"],
-  ["Sentinel", "Wraith"],
-  ["Controller", "Spectre"],
-  ["Duelist", "Nova"],
-  ["Support", "Aegis"],
+  ["Duelista", "Kraken"],
+  ["Iniciador", "Rift"],
+  ["Centinela", "Wraith"],
+  ["Controlador", "Spectre"],
+  ["Duelista", "Nova"],
+  ["Apoyo", "Aegis"],
 ] as const;
 
 export default async function DashboardPage() {
@@ -56,18 +56,18 @@ export default async function DashboardPage() {
         <>
           <section className="dash-header">
             <div>
-              <div className="concept-kicker">Tactical overview</div>
+              <div className="concept-kicker">Resumen táctico</div>
               <div className="mt-4 flex flex-col gap-4 xl:flex-row xl:items-end">
                 <h1 className="dash-team-title">{activeRegistration.teamName}</h1>
                 <span className="dash-team-id">{formatRegistrationStatus(activeRegistration.status)}</span>
               </div>
               <div className="mt-4 flex flex-wrap items-center gap-5 text-sm font-black uppercase tracking-[0.14em] text-valorant-muted">
                 <span className="flex items-center gap-2">
-                  <Lock className="size-4" /> {members.length} / 6 players locked
+                  <Lock className="size-4" /> {members.length} / 6 jugadores fijados
                 </span>
                 <span className="flex items-center gap-2">
                   <CalendarClock className="size-4" />
-                  Starts {formatMatchDate(activeRegistration.tournamentStartsAt)}
+                  Empieza {formatMatchDate(activeRegistration.tournamentStartsAt)}
                 </span>
               </div>
             </div>
@@ -94,10 +94,10 @@ export default async function DashboardPage() {
           <PlayerHistoryPanel standing={standing} matches={history} teamId={activeRegistration.teamId} />
 
           <section className="dash-roster-head">
-            <div className="concept-kicker">Roster ({members.length}/6)</div>
+            <div className="concept-kicker">Plantilla ({members.length}/6)</div>
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-valorant-bone">
               <Lock className="size-4 text-valorant-red" />
-              Captain mission active
+              Misión de capitán activa
             </div>
           </section>
 
@@ -115,7 +115,7 @@ export default async function DashboardPage() {
                   <div className="dash-agent-role">{agentRole}</div>
                   <h3>{callSign}</h3>
                   <div className="dash-agent-lock">
-                    Locked <Lock className="size-3" />
+                    Fijado <Lock className="size-3" />
                   </div>
                   <div className="dash-agent-riot">{member.riotId}</div>
                 </article>
@@ -126,10 +126,10 @@ export default async function DashboardPage() {
       ) : (
         <section className="dash-empty">
           <Trophy className="size-12 text-valorant-red" />
-          <h1 className="dash-team-title">No squad locked</h1>
+          <h1 className="dash-team-title">No hay equipo fijado</h1>
           <p>Crea tu equipo, registra seis Riot IDs y entra en la cola de revisión del torneo.</p>
           <Button asChild className="arena-button h-12 rounded-none px-7 font-black uppercase tracking-[0.16em]">
-            <Link href="/register">Register squad <ArrowRight className="size-4" /></Link>
+            <Link href="/register">Inscribir equipo <ArrowRight className="size-4" /></Link>
           </Button>
         </section>
       )}

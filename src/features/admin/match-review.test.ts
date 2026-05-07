@@ -58,4 +58,4 @@ assert.throws(
   /ganador/i,
 );
 
-console.log("match-review tests passed");
+console.log("pruebas de revisión de partida superadas");

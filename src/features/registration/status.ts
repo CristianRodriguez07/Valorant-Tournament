@@ -20,7 +20,7 @@ export function formatRegistrationStatus(status: TournamentRegistration["status"
     approved: "Aprobado",
     rejected: "Rechazado",
     waitlisted: "En lista de espera",
-    checked_in: "Check-in confirmado",
+    checked_in: "Presencia confirmada",
   } satisfies Record<TournamentRegistration["status"], string>;
 
   return labels[status];

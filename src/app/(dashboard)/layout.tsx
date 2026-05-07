@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  ["Overview", "/dashboard", LayoutDashboard],
-  ["Roster", "/dashboard/roster", Users],
-  ["Brackets", "/dashboard/brackets", GitBranch],
+  ["Resumen", "/dashboard", LayoutDashboard],
+  ["Plantilla", "/dashboard/roster", Users],
+  ["Cuadros", "/dashboard/brackets", GitBranch],
 ] as const;
 
 export default async function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -21,7 +21,7 @@ export default async function DashboardLayout({ children }: Readonly<{ children:
   }
 
   const visibleNavItems = session.user.role === "admin"
-    ? [...navItems, ["Admin", "/dashboard/admin", ShieldAlert] as const]
+    ? [...navItems, ["Administración", "/dashboard/admin", ShieldAlert] as const]
     : navItems;
 
   return (
@@ -42,8 +42,8 @@ export default async function DashboardLayout({ children }: Readonly<{ children:
             <Link href="/" className="dash-brand">
               <span className="v-mark v-mark-sm" aria-hidden="true" />
               <span>
-                <span className="block text-2xl font-black uppercase tracking-[0.12em] text-valorant-bone">Tournament</span>
-                <span className="text-xs font-black uppercase tracking-[0.2em] text-valorant-muted">Operations hub</span>
+                <span className="block text-2xl font-black uppercase tracking-[0.12em] text-valorant-bone">Torneo</span>
+                <span className="text-xs font-black uppercase tracking-[0.2em] text-valorant-muted">Centro operativo</span>
               </span>
             </Link>
 
@@ -61,10 +61,10 @@ export default async function DashboardLayout({ children }: Readonly<{ children:
             <div className="dash-system">
               <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-valorant-muted">
                 <span className="size-2 rounded-full bg-valorant-green" />
-                System status
+                Estado del sistema
               </div>
               <div className="mt-3 text-sm font-black uppercase tracking-[0.14em] text-valorant-green">
-                All systems nominal
+                Sistemas nominales
               </div>
             </div>
 
@@ -73,11 +73,11 @@ export default async function DashboardLayout({ children }: Readonly<{ children:
                 <Crosshair className="size-7 text-valorant-red" />
               </span>
               <span>
-                <span className="block text-xs font-black uppercase tracking-[0.18em] text-valorant-muted">Operator</span>
+                <span className="block text-xs font-black uppercase tracking-[0.18em] text-valorant-muted">Operador</span>
                 <span className="mt-1 block text-sm font-bold text-valorant-bone">
                   {session.user.name ?? session.user.email ?? "Codex#1337"}
                 </span>
-                <span className="text-xs font-black uppercase tracking-[0.16em] text-valorant-green">Online</span>
+                <span className="text-xs font-black uppercase tracking-[0.16em] text-valorant-green">Conectado</span>
               </span>
             </div>
 
@@ -89,7 +89,7 @@ export default async function DashboardLayout({ children }: Readonly<{ children:
             >
               <Button variant="outline" className="concept-button concept-button-dark h-12 w-full rounded-none font-black uppercase tracking-[0.16em]">
                 <LogOut className="size-4" />
-                Sign out
+                Cerrar sesión
               </Button>
             </form>
           </div>

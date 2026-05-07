@@ -28,10 +28,10 @@ export default async function RosterPage() {
           <div>
             <div className="arena-kicker flex items-center gap-2">
               <Users className="size-4" />
-              Roster vault
+              Cámara de plantilla
             </div>
             <h1 className="arena-display mt-3 text-7xl leading-none text-valorant-bone md:text-9xl">
-              Players locked
+              Jugadores fijados
             </h1>
           </div>
           {registration ? (
@@ -51,7 +51,7 @@ export default async function RosterPage() {
               <div className="arena-display mt-1 text-5xl leading-none text-valorant-bone">{team.name}</div>
             </div>
             <div className="text-sm font-black uppercase tracking-[0.18em] text-valorant-green">
-              {team.members.length} / 6 players locked
+              {team.members.length} / 6 jugadores fijados
             </div>
           </section>
           <section className="control-room-side control-room-side-wide">
@@ -70,8 +70,8 @@ export default async function RosterPage() {
         </section>
       ) : (
         <section className="arena-panel p-6">
-          <p className="font-semibold text-valorant-bone">No hay roster registrado todavía.</p>
-          <p className="mt-2 text-sm text-valorant-muted">Crea tu equipo para que los slots aparezcan aquí.</p>
+          <p className="font-semibold text-valorant-bone">No hay plantilla registrada todavía.</p>
+          <p className="mt-2 text-sm text-valorant-muted">Crea tu equipo para que las plazas aparezcan aquí.</p>
           <Button asChild className="arena-button mt-5 h-12 rounded-none px-6 font-black uppercase tracking-[0.16em]">
             <Link href="/register">Inscribirme <ArrowRight className="size-4" /></Link>
           </Button>

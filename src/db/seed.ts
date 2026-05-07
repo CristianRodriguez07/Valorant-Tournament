@@ -8,7 +8,7 @@ import { tournaments } from "./schema";
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required");
+  throw new Error("DATABASE_URL es obligatoria");
 }
 
 const client = postgres(databaseUrl, {
@@ -36,7 +36,7 @@ async function main() {
     })
     .onConflictDoNothing({ target: tournaments.slug });
 
-  console.log("Seed complete: valorant-ignition-cup");
+  console.log("Datos semilla completados: valorant-ignition-cup");
 }
 
 main()

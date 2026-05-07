@@ -5,10 +5,10 @@ export function AdminSignalCard({ status }: { status: string }) {
     <section className="admin-signal-card">
       <div className="concept-kicker flex items-center gap-2">
         <RadioTower className="size-4" />
-        Admin signal
+        Señal de administración
       </div>
       <strong>{status}</strong>
-      <p>Operations staff can see this squad in the control room queue.</p>
+      <p>El equipo de operaciones puede ver este equipo en la cola de la sala de control.</p>
     </section>
   );
 }

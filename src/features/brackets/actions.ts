@@ -22,19 +22,19 @@ export type PublishBracketResult =
 export async function publishDoubleEliminationBracket(formData: FormData): Promise<PublishBracketResult> {
   const session = await auth();
   if (!session?.user?.id || session.user.role !== "admin") {
-    return { ok: false, error: "Admin access is required to publish a bracket." };
+    return { ok: false, error: "Se requiere acceso de administración para publicar un cuadro." };
   }
 
   const tournamentId = formData.get("tournamentId");
   if (typeof tournamentId !== "string") {
-    return { ok: false, error: "Tournament id is required." };
+    return { ok: false, error: "El id del torneo es obligatorio." };
   }
 
   const existing = await db.query.matches.findFirst({
     where: eq(matches.tournamentId, tournamentId),
   });
   if (existing) {
-    return { ok: false, error: "This tournament already has bracket matches." };
+    return { ok: false, error: "Este torneo ya tiene partidas de cuadro." };
   }
 
   let plan;
@@ -45,7 +45,7 @@ export async function publishDoubleEliminationBracket(formData: FormData): Promi
   } catch (error) {
     return {
       ok: false,
-      error: error instanceof Error ? error.message : "Bracket generation failed.",
+      error: error instanceof Error ? error.message : "No se pudo generar el cuadro.",
     };
   }
 
@@ -58,7 +58,7 @@ export async function publishDoubleEliminationBracket(formData: FormData): Promi
         .values(toMatchInsert(tournamentId, planned))
         .returning({ id: matches.id });
       if (!created) {
-        throw new Error("Match insert failed.");
+        throw new Error("No se pudo insertar la partida.");
       }
       insertedIds.set(planned.planId, created.id);
     }
@@ -66,7 +66,7 @@ export async function publishDoubleEliminationBracket(formData: FormData): Promi
     for (const planned of plan.matches) {
       const matchId = insertedIds.get(planned.planId);
       if (!matchId) {
-        throw new Error("Missing inserted match id.");
+        throw new Error("Falta el id de una partida insertada.");
       }
 
       await tx
@@ -126,7 +126,7 @@ async function loadEligibleBracketTeams(tournamentId: string): Promise<EligibleB
   );
 
   if (eligible.length < 2) {
-    throw new Error("At least two approved or checked-in teams are required.");
+    throw new Error("Se requieren al menos dos equipos aprobados o con presencia confirmada.");
   }
 
   return eligible.map((registration) => ({

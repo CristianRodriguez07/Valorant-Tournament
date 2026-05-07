@@ -27,7 +27,7 @@ export async function checkInCaptainTeam(registrationId: string): Promise<CheckI
   const session = await auth();
 
   if (!session?.user?.id) {
-    return { ok: false, error: "Necesitas iniciar sesion para hacer check-in." };
+    return { ok: false, error: "Necesitas iniciar sesión para confirmar presencia." };
   }
 
   const [registration] = await db
@@ -47,7 +47,7 @@ export async function checkInCaptainTeam(registrationId: string): Promise<CheckI
     .limit(1);
 
   if (!registration) {
-    return { ok: false, error: "No tienes permiso para hacer check-in con este equipo." };
+    return { ok: false, error: "No tienes permiso para confirmar presencia con este equipo." };
   }
 
   if (registration.checkedInAt) {
@@ -55,7 +55,7 @@ export async function checkInCaptainTeam(registrationId: string): Promise<CheckI
   }
 
   if (registration.status !== "approved") {
-    return { ok: false, error: "El check-in se habilita cuando administracion aprueba el roster." };
+    return { ok: false, error: "La presencia se habilita cuando administración aprueba la plantilla." };
   }
 
   const checkedInAt = new Date();
@@ -90,7 +90,7 @@ export async function reportCaptainMatchResult(matchId: string): Promise<CheckIn
   const session = await auth();
 
   if (!session?.user?.id) {
-    return { ok: false, error: "Necesitas iniciar sesion para reportar resultado." };
+    return { ok: false, error: "Necesitas iniciar sesión para reportar resultado." };
   }
 
   const captainMatch = await getCaptainMatch(matchId, session.user.id);
@@ -100,7 +100,7 @@ export async function reportCaptainMatchResult(matchId: string): Promise<CheckIn
   }
 
   if (captainMatch.match.status === "completed") {
-    return { ok: false, error: "Esta partida ya esta completada." };
+    return { ok: false, error: "Esta partida ya está completada." };
   }
 
   const reportedAt = new Date();
@@ -137,7 +137,7 @@ export async function openCaptainMatchDispute(matchId: string): Promise<CheckInR
   const session = await auth();
 
   if (!session?.user?.id) {
-    return { ok: false, error: "Necesitas iniciar sesion para abrir disputa." };
+    return { ok: false, error: "Necesitas iniciar sesión para abrir disputa." };
   }
 
   const captainMatch = await getCaptainMatch(matchId, session.user.id);
@@ -147,7 +147,7 @@ export async function openCaptainMatchDispute(matchId: string): Promise<CheckInR
   }
 
   if (captainMatch.match.status === "completed") {
-    return { ok: false, error: "Esta partida ya esta completada." };
+    return { ok: false, error: "Esta partida ya está completada." };
   }
 
   const disputedAt = new Date();

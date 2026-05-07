@@ -18,9 +18,9 @@ export type MissionItem = {
 export function getRosterReadiness(memberCount: number) {
   if (memberCount >= 6) {
     return {
-      label: "Roster locked",
+      label: "Plantilla cerrada",
       value: `${memberCount} / 6`,
-      description: "Six Riot IDs are ready for admin review.",
+      description: "Seis Riot IDs listos para revisión de administración.",
       tone: "ready" as const,
     };
   }
@@ -28,27 +28,27 @@ export function getRosterReadiness(memberCount: number) {
   const missingPlayers = 6 - memberCount;
 
   return {
-    label: "Roster incomplete",
+    label: "Plantilla incompleta",
     value: `${memberCount} / 6`,
-    description: `${missingPlayers} player slot${missingPlayers === 1 ? "" : "s"} must be filled before the squad can lock.`,
+    description: `Faltan ${missingPlayers} ${missingPlayers === 1 ? "plaza" : "plazas"} antes de cerrar el equipo.`,
     tone: "danger" as const,
   };
 }
 
 export function getRegistrationMission(status: TournamentRegistration["status"]) {
   const states = {
-    draft: ["Draft", "Finish the squad registration before entering review.", "warning"],
-    pending_review: ["Under review", "Admin is validating the squad and Riot IDs.", "warning"],
-    approved: ["Approved", "Your squad is eligible for matchday operations.", "ready"],
-    rejected: ["Rejected", "Registration needs a correction before entering the bracket.", "danger"],
-    waitlisted: ["Waitlisted", "The squad is queued behind the current tournament cap.", "warning"],
-    checked_in: ["Checked in", "Captain presence is confirmed for matchday.", "ready"],
+    draft: ["Borrador", "Completa el registro del equipo antes de entrar en revisión.", "warning"],
+    pending_review: ["En revisión", "Administración está validando el equipo y los Riot IDs.", "warning"],
+    approved: ["Aprobado", "Tu equipo ya puede operar el día de partida.", "ready"],
+    rejected: ["Rechazado", "El registro necesita una corrección antes de entrar al cuadro.", "danger"],
+    waitlisted: ["En espera", "El equipo está en cola por detrás del cupo actual.", "warning"],
+    checked_in: ["Presencia confirmada", "La presencia del capitán está confirmada para el día de partida.", "ready"],
   } satisfies Record<TournamentRegistration["status"], [string, string, MissionTone]>;
 
   const [value, description, tone] = states[status];
 
   return {
-    label: "Registration",
+    label: "Inscripción",
     value,
     description,
     tone,
@@ -58,17 +58,17 @@ export function getRegistrationMission(status: TournamentRegistration["status"])
 export function getMatchMission(match: ReadyRoomMatch | null | undefined) {
   if (!match) {
     return {
-      label: "Next match",
-      value: "Bracket pending",
-      description: "Opponent and lobby details appear after admin publishes the bracket.",
+      label: "Siguiente partida",
+      value: "Cuadro pendiente",
+      description: "El rival y la sala aparecerán cuando administración publique el cuadro.",
       tone: "neutral" as const,
     };
   }
 
   return {
-    label: `Round ${match.round} / Match ${match.matchNumber}`,
-    value: `${match.teamA?.name ?? "Awaiting assignment"} vs ${match.teamB?.name ?? "Awaiting assignment"}`,
-    description: match.scheduledAt ? `Scheduled for ${formatMatchDate(match.scheduledAt)}` : "Schedule is being finalized.",
+    label: `Ronda ${match.round} / Partida ${match.matchNumber}`,
+    value: `${match.teamA?.name ?? "Asignación pendiente"} vs ${match.teamB?.name ?? "Asignación pendiente"}`,
+    description: match.scheduledAt ? `Programada para ${formatMatchDate(match.scheduledAt)}` : "La hora se está cerrando.",
     tone: match.status === "ready" || match.status === "live" ? "ready" as const : "warning" as const,
   };
 }
@@ -88,11 +88,11 @@ export function buildMissionItems(input: {
     { id: "roster", ...roster },
     {
       id: "check-in",
-      label: "Check-in",
-      value: input.checkedInAt ? "Confirmed" : "Pending",
+      label: "Presencia",
+      value: input.checkedInAt ? "Confirmada" : "Pendiente",
       description: input.checkedInAt
-        ? `Confirmed at ${formatMatchDate(input.checkedInAt)}`
-        : "Captain check-in opens once the squad is approved.",
+        ? `Confirmada el ${formatMatchDate(input.checkedInAt)}`
+        : "La confirmación de presencia se abre cuando el equipo queda aprobado.",
       tone: input.checkedInAt ? "ready" : "warning",
     },
     { id: "match", ...match },
@@ -107,24 +107,51 @@ export function getReadyRoomActionState(input: {
   if (input.checkedInAt) {
     return {
       canCheckIn: false,
-      label: "Captain checked in",
-      description: "Your team is marked present for tournament operations.",
+      label: "Capitán presente",
+      description: "Tu equipo está marcado como presente para las operaciones del torneo.",
     };
   }
 
   if (input.registrationStatus !== "approved") {
     return {
       canCheckIn: false,
-      label: "Awaiting approval",
-      description: "Check-in unlocks after admin approves the registration.",
+      label: "Esperando aprobación",
+      description: "La presencia se desbloquea cuando administración aprueba la inscripción.",
     };
   }
 
   return {
     canCheckIn: true,
-    label: input.nextMatch ? "Ready to check in" : "Pre-check available",
-    description: input.nextMatch ? "Confirm captain presence before lobby assignment." : "Confirm presence while admin prepares the bracket.",
+    label: input.nextMatch ? "Confirmar presencia" : "Presencia disponible",
+    description: input.nextMatch ? "Confirma la presencia del capitán antes de la asignación de sala." : "Confirma presencia mientras administración prepara el cuadro.",
   };
+}
+
+export function formatMatchStatus(status: Match["status"]) {
+  const labels = {
+    scheduled: "Programada",
+    ready: "Lista",
+    live: "En directo",
+    reported: "Reportada",
+    disputed: "En disputa",
+    completed: "Completada",
+  } satisfies Record<Match["status"], string>;
+
+  return labels[status];
+}
+
+type StandingStatus = "active" | "lower_bracket" | "eliminated" | "runner_up" | "champion";
+
+export function formatStandingStatus(status: StandingStatus) {
+  const labels = {
+    active: "En competición",
+    lower_bracket: "Cuadro inferior",
+    eliminated: "Eliminado",
+    runner_up: "Subcampeón",
+    champion: "Campeón",
+  } satisfies Record<StandingStatus, string>;
+
+  return labels[status];
 }
 
 export function formatMatchDate(date: Date) {

@@ -10,7 +10,7 @@ function team(index: number, seed: number | null = index): EligibleBracketTeam {
     registrationId: `registration-${index}`,
     tournamentId: "tournament-main",
     teamId: `team-${index}`,
-    teamName: `Team ${index}`,
+    teamName: `Equipo ${index}`,
     seed,
     status: index % 2 === 0 ? "checked_in" : "approved",
     checkedInAt: index % 2 === 0 ? now : null,
@@ -18,8 +18,8 @@ function team(index: number, seed: number | null = index): EligibleBracketTeam {
     members: [
       {
         userId: `user-${index}`,
-        riotId: `Player${index}#EUW`,
-        riotIdNormalized: `player${index}#euw`,
+        riotId: `Jugador${index}#EUW`,
+        riotIdNormalized: `jugador${index}#euw`,
         role: "starter",
         isCaptain: true,
       },
@@ -64,7 +64,7 @@ assert.equal(
   sixTeamPlan.matches.filter((match) => match.status === "completed" && match.winnerTeamId).length,
   2,
 );
-assert.equal(sixTeamPlan.warnings.includes("Bracket expanded from 6 teams to 8 slots with 2 byes."), true);
+assert.equal(sixTeamPlan.warnings.includes("Cuadro ampliado de 6 equipos a 8 plazas con 2 descansos."), true);
 
 const twoTeamPlan = createDoubleEliminationPlan({
   tournamentId: "tournament-main",
@@ -84,7 +84,7 @@ assert.throws(
       tournamentId: "tournament-main",
       teams: [team(1)],
     }),
-  /at least two/i,
+  /al menos dos/i,
 );
 
-console.log("double-elimination generator tests passed");
+console.log("pruebas de generador de doble eliminación superadas");

@@ -33,10 +33,10 @@ export function AdminRegistrationCard({ item }: AdminRegistrationCardProps) {
       </div>
 
       <div className="admin-queue-meta">
-        <p>{item.memberCount} / 6 players locked</p>
-        <small>{item.checkedInAt ? "Checked in" : "Check-in pending"}</small>
-        <small>{item.assignedMatchCount ? "Match seeded" : "No match assignment"}</small>
-        {item.rejectionReason ? <small>Reason: {item.rejectionReason}</small> : null}
+        <p>{item.memberCount} / 6 jugadores fijados</p>
+        <small>{item.checkedInAt ? "Presencia confirmada" : "Presencia pendiente"}</small>
+        <small>{item.assignedMatchCount ? "Partida creada" : "Sin partida asignada"}</small>
+        {item.rejectionReason ? <small>Motivo: {item.rejectionReason}</small> : null}
       </div>
 
       <div className="admin-queue-actions">
@@ -48,7 +48,7 @@ export function AdminRegistrationCard({ item }: AdminRegistrationCardProps) {
             className="arena-button h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
           >
             <CheckCircle2 className="size-4" />
-            Approve
+            Aprobar
           </Button>
         </form>
 
@@ -61,7 +61,7 @@ export function AdminRegistrationCard({ item }: AdminRegistrationCardProps) {
             className="arena-button-outline h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
           >
             <Clock3 className="size-4" />
-            Waitlist
+            Lista de espera
           </Button>
         </form>
 
@@ -76,7 +76,7 @@ export function AdminRegistrationCard({ item }: AdminRegistrationCardProps) {
             className="arena-button-outline h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
           >
             <Rocket className="size-4" />
-            {item.assignedMatchCount ? "Match seeded" : "Launch match"}
+            {item.assignedMatchCount ? "Partida creada" : "Lanzar partida"}
           </Button>
         </form>
       </div>
@@ -85,12 +85,12 @@ export function AdminRegistrationCard({ item }: AdminRegistrationCardProps) {
         <input type="hidden" name="registrationId" value={item.registrationId} />
         <input type="hidden" name="decision" value="reject" />
         <label>
-          <span>Reject reason</span>
+          <span>Motivo de rechazo</span>
           <input
             name="rejectionReason"
             required
             minLength={4}
-            placeholder="Duplicate Riot ID, invalid roster..."
+            placeholder="Riot ID duplicado, plantilla inválida..."
             defaultValue={item.status === "rejected" ? item.rejectionReason ?? "" : ""}
           />
         </label>
@@ -99,13 +99,13 @@ export function AdminRegistrationCard({ item }: AdminRegistrationCardProps) {
           className="arena-button-outline h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
         >
           <FileX2 className="size-4" />
-          Reject
+          Rechazar
         </Button>
       </form>
 
       <div className="admin-queue-footer">
         <ShieldAlert className="size-4" />
-        Submitted {item.createdAt.toLocaleString("es-ES")}
+        Enviado el {item.createdAt.toLocaleString("es-ES")}
       </div>
     </article>
   );

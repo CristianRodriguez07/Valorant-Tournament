@@ -36,10 +36,10 @@ export default async function AdminControlRoomPage() {
       <section className="arena-panel p-6 md:p-8">
         <div className="arena-kicker flex items-center gap-2">
           <ShieldAlert className="size-4" />
-          Admin control room
+          Sala de control de administración
         </div>
         <h1 className="arena-display mt-3 text-7xl leading-none text-valorant-bone md:text-9xl">
-          Queue scan
+          Escaneo de cola
         </h1>
       </section>
 
@@ -47,7 +47,7 @@ export default async function AdminControlRoomPage() {
         <section className="admin-bracket-command">
           <SeedBoard
             tournamentId={firstTournamentId}
-            title={tournamentItems[0]?.tournamentTitle ?? "Tournament"}
+            title={tournamentItems[0]?.tournamentTitle ?? "Torneo"}
             items={tournamentItems}
             hasBracket={hasBracket}
             hasBlockingMatches={hasBlockingMatches}
@@ -61,9 +61,9 @@ export default async function AdminControlRoomPage() {
           queue.map((item) => <AdminRegistrationCard key={item.registrationId} item={item} />)
         ) : (
           <article className="admin-queue-card">
-            <span>Registration queue</span>
-            <h2>No squads waiting</h2>
-            <p>Approved, pending, and checked-in teams appear here when registrations exist.</p>
+            <span>Cola de inscripción</span>
+            <h2>No hay equipos esperando</h2>
+            <p>Los equipos aprobados, pendientes y con presencia confirmada aparecerán aquí cuando existan inscripciones.</p>
           </article>
         )}
       </section>
@@ -71,10 +71,10 @@ export default async function AdminControlRoomPage() {
       <section className="arena-panel p-6 md:p-8">
         <div className="arena-kicker flex items-center gap-2">
           <ShieldAlert className="size-4" />
-          Match review
+          Revisión de partidas
         </div>
         <h2 className="arena-display mt-3 text-6xl leading-none text-valorant-bone md:text-8xl">
-          Result desk
+          Mesa de resultados
         </h2>
       </section>
 
@@ -83,9 +83,9 @@ export default async function AdminControlRoomPage() {
           matchQueue.map((match) => <AdminMatchCard key={match.id} match={match} />)
         ) : (
           <article className="admin-queue-card">
-            <span>Match review</span>
-            <h2>No live reports</h2>
-            <p>Reported wins and disputes appear here for final admin control.</p>
+            <span>Revisión de partidas</span>
+            <h2>No hay reportes activos</h2>
+            <p>Las victorias reportadas y disputas aparecerán aquí para el control final de administración.</p>
           </article>
         )}
       </section>

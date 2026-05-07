@@ -22,7 +22,7 @@ export function MatchActionPanel({ match, checkedInAt }: MatchActionPanelProps) 
   return (
     <section className="match-action-panel">
       <div>
-        <div className="concept-kicker">Result operations</div>
+        <div className="concept-kicker">Operaciones de resultado</div>
         <h3>{headline.title}</h3>
         <p>{headline.description}</p>
       </div>
@@ -35,7 +35,7 @@ export function MatchActionPanel({ match, checkedInAt }: MatchActionPanelProps) 
             className="arena-button-outline h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
           >
             <UploadCloud className="size-4" />
-            Report 1-0 win
+            Reportar victoria 1-0
           </Button>
         </form>
         <form action={openCaptainMatchDisputeFromForm}>
@@ -46,7 +46,7 @@ export function MatchActionPanel({ match, checkedInAt }: MatchActionPanelProps) 
             className="arena-button-outline h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
           >
             <FileWarning className="size-4" />
-            Open dispute
+            Abrir disputa
           </Button>
         </form>
       </div>
@@ -63,41 +63,41 @@ function getResultHeadline({
 }) {
   if (!match) {
     return {
-      title: "Match signal idle",
-      description: "Result controls arm after admin assigns a live bracket match.",
+      title: "Señal de partida inactiva",
+      description: "Los controles de resultado se activan cuando administración asigna una partida del cuadro.",
     };
   }
 
   if (!hasCheckIn) {
     return {
-      title: "Check-in required",
-      description: "Confirm captain presence before reporting a result or opening a dispute.",
+      title: "Presencia requerida",
+      description: "Confirma la presencia del capitán antes de reportar resultado o abrir disputa.",
     };
   }
 
   if (match.status === "reported") {
     return {
-      title: "Result transmitted",
-      description: "Your win report is queued for admin verification.",
+      title: "Resultado transmitido",
+      description: "Tu reporte de victoria está en cola para verificación de administración.",
     };
   }
 
   if (match.status === "disputed") {
     return {
-      title: "Dispute channel open",
-      description: "The match is flagged for admin review before the bracket advances.",
+      title: "Canal de disputa abierto",
+      description: "La partida queda marcada para revisión de administración antes de avanzar el cuadro.",
     };
   }
 
   if (match.status === "completed") {
     return {
-      title: "Result locked",
-      description: "Admin has confirmed the score and closed this match record.",
+      title: "Resultado cerrado",
+      description: "Administración confirmó el marcador y cerró el registro de la partida.",
     };
   }
 
   return {
-    title: "Result uplink armed",
-    description: "Report a clean 1-0 win for your side or flag the match for admin review.",
+    title: "Enlace de resultado armado",
+    description: "Reporta una victoria limpia 1-0 de tu lado o marca la partida para revisión de administración.",
   };
 }

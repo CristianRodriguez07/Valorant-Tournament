@@ -17,11 +17,11 @@ assert.deepEqual(resolveRegistrationReview({ decision: "waitlist" }), {
 assert.deepEqual(
   resolveRegistrationReview({
     decision: "reject",
-    rejectionReason: "Roster has a duplicate Riot ID.",
+    rejectionReason: "La plantilla tiene un Riot ID duplicado.",
   }),
   {
     status: "rejected",
-    rejectionReason: "Roster has a duplicate Riot ID.",
+    rejectionReason: "La plantilla tiene un Riot ID duplicado.",
     clearCheckIn: true,
   },
 );
@@ -31,4 +31,4 @@ assert.throws(
   /motivo/i,
 );
 
-console.log("registration-review tests passed");
+console.log("pruebas de revisión de inscripción superadas");

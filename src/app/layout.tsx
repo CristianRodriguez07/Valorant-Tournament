@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     default: "Valorant Arena | Registro de Torneos",
     template: "%s | Valorant Arena",
   },
-  description: "Plataforma premium para registrar equipos, gestionar rosters y competir en torneos de Valorant.",
-  keywords: ["Valorant", "E-Sports", "Torneo", "Gaming", "Registro"],
+  description: "Plataforma de alta calidad para registrar equipos, gestionar plantillas y competir en torneos de Valorant.",
+  keywords: ["Valorant", "Deportes electrónicos", "Torneo", "Videojuegos", "Registro"],
   openGraph: {
     title: "Valorant Arena",
     description: "Inscripción competitiva para torneos de Valorant.",

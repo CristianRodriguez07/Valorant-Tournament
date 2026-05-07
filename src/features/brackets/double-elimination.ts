@@ -11,7 +11,7 @@ import type {
 
 export function nextPowerOfTwo(value: number) {
   if (!Number.isInteger(value) || value < 1) {
-    throw new Error("Bracket size input must be a positive integer.");
+    throw new Error("El tamaño del cuadro debe ser un entero positivo.");
   }
 
   let size = 1;
@@ -23,7 +23,7 @@ export function nextPowerOfTwo(value: number) {
 
 export function getSeedOrder(size: number): number[] {
   if (!Number.isInteger(size) || size < 2 || !isPowerOfTwo(size)) {
-    throw new Error("Seed order size must be an even power-of-two value.");
+    throw new Error("El tamaño de orden de cabezas de serie debe ser una potencia de dos par.");
   }
 
   let order = [1, 2];
@@ -91,7 +91,7 @@ function createMatch(input: {
 
 function normalizeTeams(teams: EligibleBracketTeam[]): SeededBracketTeam[] {
   if (teams.length < 2) {
-    throw new Error("Double elimination requires at least two eligible teams.");
+    throw new Error("La doble eliminación requiere al menos dos equipos aptos.");
   }
 
   return [...teams]
@@ -155,7 +155,7 @@ export function createDoubleEliminationPlan(input: {
   const warnings =
     bracketSize === teams.length
       ? []
-      : [`Bracket expanded from ${teams.length} teams to ${bracketSize} slots with ${bracketSize - teams.length} byes.`];
+      : [`Cuadro ampliado de ${teams.length} equipos a ${bracketSize} plazas con ${bracketSize - teams.length} descansos.`];
   const seededBySeed = new Map(teams.map((team) => [team.seed, team]));
   const seedOrder = getSeedOrder(bracketSize);
   const matches: PlannedBracketMatch[] = [];

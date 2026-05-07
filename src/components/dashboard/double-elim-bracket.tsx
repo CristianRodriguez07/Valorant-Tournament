@@ -1,6 +1,7 @@
 import { Crown, GitBranch, ShieldAlert, Skull, Swords, Trophy } from "lucide-react";
 
 import type { Match, Team } from "@/db/schema";
+import { formatMatchStatus } from "@/features/matchday/status";
 
 type BracketMatch = Match & {
   teamA?: Team | null;
@@ -15,10 +16,10 @@ const lanes: Array<{
   label: string;
   callout: string;
 }> = [
-  { id: "upper", label: "Upper", callout: "no losses" },
-  { id: "lower", label: "Lower", callout: "survival route" },
-  { id: "grand_final", label: "Grand Final", callout: "title lock" },
-  { id: "grand_final_reset", label: "Reset Final", callout: "bracket reset" },
+  { id: "upper", label: "Cuadro superior", callout: "sin derrotas" },
+  { id: "lower", label: "Cuadro inferior", callout: "ruta de supervivencia" },
+  { id: "grand_final", label: "Gran final", callout: "cierre del título" },
+  { id: "grand_final_reset", label: "Final de reinicio", callout: "reinicio del cuadro" },
 ];
 
 export function DoubleElimBracket({
@@ -39,14 +40,14 @@ export function DoubleElimBracket({
         <div>
           <div className="arena-kicker flex items-center gap-2">
             <GitBranch className="size-4" />
-            Competitive topology
+            Topología competitiva
           </div>
-          <h2>Double elimination map</h2>
+          <h2>Mapa de doble eliminación</h2>
         </div>
-        <div className="double-bracket-stats" aria-label="Bracket status">
-          <span>{bracketedMatches.length} matches</span>
-          <span>{readyCount} armed</span>
-          <span>{completedCount} resolved</span>
+        <div className="double-bracket-stats" aria-label="Estado del cuadro">
+          <span>{bracketedMatches.length} partidas</span>
+          <span>{readyCount} armadas</span>
+          <span>{completedCount} resueltas</span>
         </div>
       </div>
 
@@ -72,7 +73,7 @@ export function DoubleElimBracket({
                         <span>
                           R{match.bracketRound ?? match.round} / M{match.bracketMatchNumber ?? match.matchNumber}
                         </span>
-                        <strong>{match.status}</strong>
+                        <strong>{formatMatchStatus(match.status)}</strong>
                       </div>
                       <TeamScore
                         name={match.teamA?.name}
@@ -86,7 +87,7 @@ export function DoubleElimBracket({
                       />
                       <div className="double-match-footer">
                         {match.winnerTeamId ? <Crown className="size-4" /> : <Swords className="size-4" />}
-                        <span>{match.winner?.name ?? "Awaiting result"}</span>
+                        <span>{match.winner?.name ?? "Esperando resultado"}</span>
                         {match.status === "completed" && !match.winnerTeamId ? <Skull className="size-4" /> : null}
                       </div>
                     </article>
@@ -99,11 +100,11 @@ export function DoubleElimBracket({
       ) : (
         <article className="double-bracket-empty">
           <ShieldAlert className="size-5" />
-          <h3>{hasLegacyOnly ? "Legacy match data" : "Bracket not published"}</h3>
+          <h3>{hasLegacyOnly ? "Datos de partidas antiguos" : "Cuadro sin publicar"}</h3>
           <p>
             {hasLegacyOnly
-              ? "Existing match assignments were created before the double-elimination topology. Clear or finish them before publishing the full bracket."
-              : "Seed at least two squads, then publish to generate upper, lower, grand final and reset-final lanes."}
+              ? "Las partidas existentes se crearon antes de la topología de doble eliminación. Límpialas o termínalas antes de publicar el cuadro completo."
+              : "Asigna al menos dos equipos y publica para generar cuadro superior, inferior, gran final y final de reinicio."}
           </p>
         </article>
       )}
@@ -114,7 +115,7 @@ export function DoubleElimBracket({
 function TeamScore({ name, score, winner }: { name?: string | null; score: number; winner: boolean }) {
   return (
     <div className={winner ? "double-match-team double-match-team-winner" : "double-match-team"}>
-      <span>{name ?? "Waiting for teams"}</span>
+      <span>{name ?? "Esperando equipos"}</span>
       <b>{winner ? <Trophy className="size-4" /> : null}{score}</b>
     </div>
   );

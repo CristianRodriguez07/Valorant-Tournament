@@ -15,7 +15,7 @@ export const riotIdSchema = z
   .string()
   .transform(normalizeRiotId)
   .pipe(
-    z.string().regex(RIOT_ID_REGEX, "Usa el formato Riot ID: Player#LAN."),
+    z.string().regex(RIOT_ID_REGEX, "Usa el formato Riot ID: Jugador#LAN."),
   );
 
 export const rosterPlayerSchema = z.object({
@@ -30,12 +30,12 @@ const teamRegistrationCoreShape = {
     .string()
     .trim()
     .min(3, "El nombre del equipo debe tener al menos 3 caracteres.")
-    .max(32, "Máximo 32 caracteres para mantener buen layout.")
+    .max(32, "Máximo 32 caracteres para mantener buena composición.")
     .regex(
       /^[\p{L}\p{N}][\p{L}\p{N}\s._-]*$/u,
       "Usa letras, números, espacios, punto, guion o underscore.",
     ),
-  players: z.array(rosterPlayerSchema).length(6, "El roster debe tener 5 titulares y 1 suplente."),
+  players: z.array(rosterPlayerSchema).length(6, "La plantilla debe tener 5 titulares y 1 suplente."),
 };
 
 function withRosterRules<T extends z.ZodRawShape>(schema: z.ZodObject<T>) {
@@ -76,7 +76,7 @@ function withRosterRules<T extends z.ZodRawShape>(schema: z.ZodObject<T>) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["players", index, "riotId"],
-          message: `Riot ID duplicado con el slot ${duplicatedAt + 1}.`,
+          message: `Riot ID duplicado con la plaza ${duplicatedAt + 1}.`,
         });
         return;
       }

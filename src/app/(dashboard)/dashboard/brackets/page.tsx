@@ -35,10 +35,10 @@ export default async function BracketsPage() {
           <div>
             <div className="arena-kicker flex items-center gap-2">
               <GitBranch className="size-4" />
-              Bracket command
+              Mando del cuadro
             </div>
             <h1 className="arena-display mt-3 text-7xl leading-none text-valorant-bone md:text-9xl">
-              Match feed
+              Canal de partidas
             </h1>
           </div>
           <Swords className="hidden size-14 text-valorant-red md:block" />
@@ -67,35 +67,35 @@ export default async function BracketsPage() {
           <div className="arena-panel p-6 md:p-8">
             <div className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-valorant-ember">
               <CalendarClock className="size-4" />
-              Bracket pendiente
+              Cuadro pendiente
             </div>
             <h2 className="arena-display mt-4 text-6xl leading-none text-valorant-bone">{registration.teamName}</h2>
             <p className="mt-4 max-w-2xl text-base font-medium leading-7 text-valorant-muted">
               Tu inscripción está en estado {formatRegistrationStatus(registration.status).toLowerCase()}.
-              Los enfrentamientos aparecerán aquí cuando administración publique el bracket.
+              Los enfrentamientos aparecerán aquí cuando administración publique el cuadro.
             </p>
 
             <div className="mt-7 grid gap-3 md:grid-cols-[1fr_0.7fr]">
               <div className="arena-panel-soft p-4">
-                <div className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-valorant-muted">Projected structure</div>
+                <div className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-valorant-muted">Estructura prevista</div>
                 <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-2 text-center">
-                  <span className="bg-valorant-red/18 px-2 py-3 text-xs font-black uppercase tracking-[0.14em] text-valorant-bone">Round 1</span>
+                  <span className="bg-valorant-red/18 px-2 py-3 text-xs font-black uppercase tracking-[0.14em] text-valorant-bone">Ronda 1</span>
                   <span className="h-px bg-valorant-red" />
-                  <span className="bg-valorant-red/18 px-2 py-3 text-xs font-black uppercase tracking-[0.14em] text-valorant-bone">Semi</span>
+                  <span className="bg-valorant-red/18 px-2 py-3 text-xs font-black uppercase tracking-[0.14em] text-valorant-bone">Semifinal</span>
                   <span className="h-px bg-valorant-red" />
                   <span className="bg-valorant-red px-2 py-3 text-xs font-black uppercase tracking-[0.14em] text-valorant-bone">Final</span>
                 </div>
               </div>
 
               <div className="arena-panel-soft p-4">
-                <div className="text-xs font-black uppercase tracking-[0.18em] text-valorant-muted">Admin signal</div>
-                <div className="arena-display mt-3 text-4xl leading-none text-valorant-red">Awaiting drop</div>
+                <div className="text-xs font-black uppercase tracking-[0.18em] text-valorant-muted">Señal de administración</div>
+                <div className="arena-display mt-3 text-4xl leading-none text-valorant-red">Esperando publicación</div>
               </div>
             </div>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Button asChild variant="outline" className="arena-button-outline h-12 rounded-none px-6 font-black uppercase tracking-[0.16em]">
-                <Link href="/dashboard/roster">Ver roster <ArrowRight className="size-4" /></Link>
+                <Link href="/dashboard/roster">Ver plantilla <ArrowRight className="size-4" /></Link>
               </Button>
               <Button asChild variant="outline" className="arena-button-outline h-12 rounded-none px-6 font-black uppercase tracking-[0.16em]">
                 <Link href="/dashboard">Volver al panel</Link>
@@ -105,7 +105,7 @@ export default async function BracketsPage() {
         ) : (
           <div className="arena-panel p-6">
             <p className="font-semibold text-valorant-bone">Aún no hay enfrentamientos asignados.</p>
-            <p className="mt-2 text-sm text-valorant-muted">Registra tu equipo para entrar en la cola de revisión del bracket.</p>
+            <p className="mt-2 text-sm text-valorant-muted">Registra tu equipo para entrar en la cola de revisión del cuadro.</p>
             <Button asChild className="arena-button mt-5 h-12 rounded-none px-6 font-black uppercase tracking-[0.16em]">
               <Link href="/register">Inscribirme <ArrowRight className="size-4" /></Link>
             </Button>

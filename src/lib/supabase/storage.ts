@@ -8,7 +8,7 @@ import { slugify } from "@/lib/utils";
 function createSupabaseAdmin() {
   if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error(
-      "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required to upload logos.",
+      "SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY son obligatorias para subir logos.",
     );
   }
 
@@ -27,7 +27,7 @@ export async function uploadTeamLogo(input: {
 }): Promise<string> {
   const supabase = createSupabaseAdmin();
   const extension = input.file.name.split(".").pop()?.toLowerCase() ?? "png";
-  const safeTeamName = slugify(input.teamName) || "team";
+  const safeTeamName = slugify(input.teamName) || "equipo";
   const path = `${input.userId}/${safeTeamName}-${crypto.randomUUID()}.${extension}`;
 
   const { error } = await supabase.storage
@@ -39,7 +39,7 @@ export async function uploadTeamLogo(input: {
     });
 
   if (error) {
-    throw new Error(`Logo upload failed: ${error.message}`);
+    throw new Error(`No se pudo subir el logo: ${error.message}`);
   }
 
   const { data } = supabase.storage

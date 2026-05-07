@@ -51,5 +51,5 @@ function resolveCaptainSide(input: CaptainMatchResultInput): "A" | "B" {
     return "B";
   }
 
-  throw new Error("El equipo del capitan no pertenece a esta partida.");
+  throw new Error("El equipo del capitán no pertenece a esta partida.");
 }

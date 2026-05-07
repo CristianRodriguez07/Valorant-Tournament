@@ -15,43 +15,43 @@ import {
 import { HeroSection } from "@/components/marketing/hero-section";
 
 const flow = [
-  ["01", "Squad lock", "Capitán, logo y seis Riot IDs entran a revisión.", Users],
-  ["02", "Admin review", "Duplicados, cupos y región se validan antes del kickoff.", ShieldCheck],
-  ["03", "Bracket drop", "El bracket aparece en el hub cuando el torneo se publica.", GitBranch],
+  ["01", "Cierre de equipo", "Capitán, logo y seis Riot IDs entran a revisión.", Users],
+  ["02", "Revisión de administración", "Duplicados, cupos y región se validan antes del inicio.", ShieldCheck],
+  ["03", "Publicación del cuadro", "El cuadro aparece en el centro cuando el torneo se publica.", GitBranch],
 ] as const;
 
 const modules = [
-  ["Registration status", "Pending review", "Tu equipo está en cola de validación."],
-  ["Lock-in countdown", "02 : 18 : 47 : 59", "Deadline: 24 May 2026 - 18:00"],
-  ["Bracket status", "Bracket pending", "Se generará cuando todos los equipos estén bloqueados."],
+  ["Estado de inscripción", "Pendiente de revisión", "Tu equipo está en cola de validación."],
+  ["Cuenta atrás de cierre", "02 : 18 : 47 : 59", "Límite: 24 de mayo de 2026 - 18:00"],
+  ["Estado del cuadro", "Cuadro pendiente", "Se generará cuando todos los equipos estén bloqueados."],
 ] as const;
 
 const roster = [
-  ["01", "Duelist", "Kraken"],
-  ["02", "Initiator", "Rift"],
-  ["03", "Sentinel", "Wraith"],
-  ["04", "Controller", "Spectre"],
-  ["05", "Duelist", "Nova"],
-  ["06", "Support", "Aegis"],
+  ["01", "Duelista", "Kraken"],
+  ["02", "Iniciador", "Rift"],
+  ["03", "Centinela", "Wraith"],
+  ["04", "Controlador", "Spectre"],
+  ["05", "Duelista", "Nova"],
+  ["06", "Apoyo", "Aegis"],
 ] as const;
 
 const feed = [
-  ["12:45", "Rift", "updated ability loadout"],
-  ["12:42", "Spectre", "locked in"],
-  ["12:41", "Kraken", "updated player card"],
+  ["12:45", "Rift", "actualizó habilidades"],
+  ["12:42", "Spectre", "quedó fijado"],
+  ["12:41", "Kraken", "actualizó tarjeta de jugador"],
 ] as const;
 
 const leaderboard = [
-  ["01", "Redline Protocol", "Qualified", "24", "+7"],
-  ["02", "Spike Theory", "In review", "21", "+4"],
-  ["03", "Midnight Vandal", "Locked", "19", "+2"],
-  ["04", "A Site Angels", "Pending", "16", "-1"],
+  ["01", "Protocolo Rojo", "Clasificado", "24", "+7"],
+  ["02", "Teoría Spike", "En revisión", "21", "+4"],
+  ["03", "Vandal Medianoche", "Fijado", "19", "+2"],
+  ["04", "Ángeles de A", "Pendiente", "16", "-1"],
 ] as const;
 
 const intel = [
-  ["Patch window", "Registration review closes before bracket seeding goes live.", "24 May", "Admin"],
-  ["Map pool", "Bind, Haven and Split are locked for the first wave.", "Pool A", "Rules"],
-  ["Broadcast feed", "Captains will receive match-room links after final approval.", "Live soon", "Ops"],
+  ["Ventana de parche", "La revisión de inscripciones cierra antes de publicar los cabezas de serie.", "24 mayo", "Administración"],
+  ["Mapas disponibles", "Bind, Haven y Split quedan fijados para la primera oleada.", "Grupo A", "Reglas"],
+  ["Canal de emisión", "Los capitanes recibirán enlaces de sala tras la aprobación final.", "Pronto en directo", "Operaciones"],
 ] as const;
 
 export default function HomePage() {
@@ -65,13 +65,13 @@ export default function HomePage() {
             <div>
               <div className="concept-kicker flex items-center gap-3">
                 <Crosshair className="size-4" />
-                Competitive flow
+                Flujo competitivo
               </div>
-              <h2>Lock the roster. Drop the bracket.</h2>
+              <h2>Cierra la plantilla. Publica el cuadro.</h2>
             </div>
             <p>
               El flujo debe sentirse como un protocolo de partida: pocas pantallas, lectura rápida y estados visibles
-              en formato broadcast.
+              en formato de retransmisión.
             </p>
           </div>
 
@@ -98,26 +98,26 @@ export default function HomePage() {
           <div className="concept-leaderboard-copy">
             <div className="concept-kicker flex items-center gap-3">
               <Swords className="size-4" />
-              Live leaderboard
+              Clasificación en directo
             </div>
-            <h2>Top squads under pressure.</h2>
+            <h2>Los mejores equipos bajo presión.</h2>
             <p>
-              El ranking baja la estética del hero a un panel competitivo: números grandes, estado claro y lectura
-              rápida de quién entra al bracket.
+              La clasificación baja la estética principal a un panel competitivo: números grandes, estado claro y lectura
+              rápida de quién entra al cuadro.
             </p>
             <div className="concept-leaderboard-signal">
               <span />
-              Syncing standings every 30 seconds
+              Clasificación sincronizada cada 30 segundos
             </div>
           </div>
 
           <div className="concept-rank-board">
             <div className="concept-rank-head">
-              <span>Rank</span>
-              <span>Squad</span>
-              <span>Status</span>
+              <span>Rango</span>
+              <span>Equipo</span>
+              <span>Estado</span>
               <span>Pts</span>
-              <span>Form</span>
+              <span>Forma</span>
             </div>
             {leaderboard.map(([rank, squad, status, points, form]) => (
               <article key={squad} className="concept-rank-row">
@@ -133,12 +133,12 @@ export default function HomePage() {
           <aside className="concept-rank-side">
             <div className="concept-kicker flex items-center gap-2">
               <Radio className="size-4" />
-              Broadcast note
+              Nota de emisión
             </div>
-            <h3>Qualification lock</h3>
-            <p>Top 16 advance after admin review. Ties break by round differential and head-to-head result.</p>
+            <h3>Cierre de clasificación</h3>
+            <p>Los 16 mejores avanzan tras revisión de administración. Los empates se rompen por diferencia de rondas y resultado directo.</p>
             <Link href="/register">
-              Join the board <ArrowRight className="size-4" />
+              Entrar en la clasificación <ArrowRight className="size-4" />
             </Link>
           </aside>
         </div>
@@ -147,30 +147,30 @@ export default function HomePage() {
       <section id="operaciones" className="concept-lower-section concept-ops-section">
         <div className="concept-dashboard-shell">
           <aside className="concept-dashboard-rail">
-            <div className="concept-rail-title">Tournament</div>
+            <div className="concept-rail-title">Torneo</div>
             <nav>
-              <span className="is-active"><Crosshair className="size-5" /> Overview</span>
-              <span><Users className="size-5" /> Roster</span>
-              <span><Swords className="size-5" /> Brackets</span>
+              <span className="is-active"><Crosshair className="size-5" /> Resumen</span>
+              <span><Users className="size-5" /> Plantilla</span>
+              <span><Swords className="size-5" /> Cuadros</span>
             </nav>
             <div className="concept-rail-status">
               <span className="size-2 rounded-full bg-valorant-green" />
-              All systems nominal
+              Sistemas nominales
             </div>
           </aside>
 
           <div className="concept-dashboard-main">
             <header className="concept-dashboard-head">
               <div>
-                <div className="concept-kicker">Tactical overview</div>
-                <h2>Codex Test Squad</h2>
+                <div className="concept-kicker">Resumen táctico</div>
+                <h2>Equipo de Prueba Codex</h2>
                 <div className="concept-dashboard-meta">
-                  <span><Lock className="size-4" /> 6 / 6 players locked</span>
-                  <span>Team ID: #CTS-2026</span>
+                  <span><Lock className="size-4" /> 6 / 6 jugadores fijados</span>
+                  <span>ID de equipo: #CTS-2026</span>
                 </div>
               </div>
               <Link href="/dashboard" className="concept-dashboard-open">
-                Open dashboard <ExternalLink className="size-4" />
+                Abrir panel <ExternalLink className="size-4" />
               </Link>
             </header>
 
@@ -189,8 +189,8 @@ export default function HomePage() {
             </div>
 
             <div className="concept-roster-heading">
-              <div className="concept-kicker">Roster (6/6)</div>
-              <span><Lock className="size-4 text-valorant-red" /> All players locked</span>
+              <div className="concept-kicker">Plantilla (6/6)</div>
+              <span><Lock className="size-4 text-valorant-red" /> Todos los jugadores fijados</span>
             </div>
 
             <div className="concept-roster-preview">
@@ -200,20 +200,20 @@ export default function HomePage() {
                   <div className="concept-agent-slot">{slot}</div>
                   <div className="concept-agent-role">{role}</div>
                   <h3>{name}</h3>
-                  <span>Locked <Lock className="size-3" /></span>
+                  <span>Fijado <Lock className="size-3" /></span>
                 </article>
               ))}
             </div>
 
             <footer className="concept-activity-feed">
-              <div className="concept-kicker">Activity feed</div>
+              <div className="concept-kicker">Actividad</div>
               <div>
                 {feed.map(([time, actor, text]) => (
                   <span key={`${time}-${actor}`}>
                     <strong>{time}</strong> <b>{actor}</b> {text}
                   </span>
                 ))}
-                <span className="concept-feed-secure"><CheckCircle2 className="size-4" /> Secure feed</span>
+                <span className="concept-feed-secure"><CheckCircle2 className="size-4" /> Canal seguro</span>
               </div>
             </footer>
           </div>
@@ -226,9 +226,9 @@ export default function HomePage() {
             <div>
               <div className="concept-kicker flex items-center gap-3">
                 <Radio className="size-4" />
-                Field intel
+                Información de campo
               </div>
-              <h2>Signals from tournament control.</h2>
+              <h2>Señales del control del torneo.</h2>
             </div>
             <p>
               La foto original tenía energía de panel operativo; esta zona convierte las noticias en tarjetas de
@@ -247,7 +247,7 @@ export default function HomePage() {
                 <h3>{title}</h3>
                 <p>{text}</p>
                 <a href="#operaciones">
-                  Read signal <ArrowRight className="size-4" />
+                  Leer señal <ArrowRight className="size-4" />
                 </a>
               </article>
             ))}
@@ -256,8 +256,8 @@ export default function HomePage() {
       </section>
 
       <section className="concept-footer-note">
-        <p>Esta competición no está afiliada ni patrocinada por Riot Games, Inc. ni por VALORANT Esports.</p>
-        <Link href="/register">Lock roster <ArrowRight className="size-4" /></Link>
+        <p>Esta competición no está afiliada ni patrocinada por Riot Games, Inc. ni por la escena competitiva oficial de VALORANT.</p>
+        <Link href="/register">Cerrar plantilla <ArrowRight className="size-4" /></Link>
       </section>
     </main>
   );

@@ -50,10 +50,10 @@ export function TournamentCountdown({ targetDate }: TournamentCountdownProps) {
       <div className="mb-4 flex items-center justify-between gap-4">
         <div className="arena-kicker flex items-center gap-2">
           <Lock className="size-4" />
-          Tournament starts in
+          El torneo empieza en
         </div>
         <span className="animate-lock-blink text-[0.68rem] font-black uppercase tracking-[0.2em] text-valorant-green">
-          Live scan
+          Escaneo activo
         </span>
       </div>
 

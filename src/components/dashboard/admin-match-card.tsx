@@ -3,6 +3,7 @@ import { CheckCheck, RotateCcw, Swords } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Match, Team, Tournament } from "@/db/schema";
 import { completeAdminMatch, resetAdminMatch } from "@/features/admin/actions";
+import { formatMatchStatus } from "@/features/matchday/status";
 
 type AdminMatchCardProps = {
   match: Match & {
@@ -20,22 +21,22 @@ export function AdminMatchCard({ match }: AdminMatchCardProps) {
     <article className="admin-queue-card admin-match-card">
       <div className="admin-queue-card-head">
         <div>
-          <span>{match.tournament?.title ?? "Tournament match"}</span>
+          <span>{match.tournament?.title ?? "Partida de torneo"}</span>
           <h2>
-            Round {match.round} / Match {match.matchNumber}
+            Ronda {match.round} / Partida {match.matchNumber}
           </h2>
         </div>
-        <strong>{match.status}</strong>
+        <strong>{formatMatchStatus(match.status)}</strong>
       </div>
 
       <div className="admin-match-versus">
         <div>
-          <b>{match.teamA?.name ?? "TBD"}</b>
+          <b>{match.teamA?.name ?? "Por definir"}</b>
           <em>{match.scoreA}</em>
         </div>
         <Swords className="size-5 text-valorant-red" />
         <div>
-          <b>{match.teamB?.name ?? "TBD"}</b>
+          <b>{match.teamB?.name ?? "Por definir"}</b>
           <em>{match.scoreB}</em>
         </div>
       </div>
@@ -49,7 +50,7 @@ export function AdminMatchCard({ match }: AdminMatchCardProps) {
             className="arena-button h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
           >
             <CheckCheck className="size-4" />
-            Complete result
+            Completar resultado
           </Button>
         </form>
 
@@ -62,7 +63,7 @@ export function AdminMatchCard({ match }: AdminMatchCardProps) {
             className="arena-button-outline h-11 rounded-none px-5 font-black uppercase tracking-[0.14em]"
           >
             <RotateCcw className="size-4" />
-            Reset lobby
+            Reiniciar sala
           </Button>
         </form>
       </div>

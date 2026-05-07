@@ -10,7 +10,7 @@ import { getDashboardRegistrations } from "@/features/tournaments/queries";
 
 export const metadata: Metadata = {
   title: "Registro de equipo",
-  description: "Registra tu equipo de Valorant, logo y roster para el torneo.",
+  description: "Registra tu equipo de Valorant, logo y plantilla para el torneo.",
 };
 
 export default async function RegisterPage() {

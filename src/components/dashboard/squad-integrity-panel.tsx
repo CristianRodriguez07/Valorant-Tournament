@@ -12,16 +12,16 @@ export function SquadIntegrityPanel({ members }: { members: TeamMember[] }) {
     <section className="squad-integrity-panel">
       <div className="concept-kicker flex items-center gap-2">
         <Users className="size-4" />
-        Squad integrity
+        Integridad del equipo
       </div>
       <div className="squad-integrity-score">{readiness.value}</div>
       <p>{readiness.description}</p>
       <div className="squad-integrity-stats">
         <span>
-          <UserCheck className="size-4" /> {starters} starters
+          <UserCheck className="size-4" /> {starters} titulares
         </span>
         <span>
-          <ShieldCheck className="size-4" /> {substitutes} substitutes
+          <ShieldCheck className="size-4" /> {substitutes} suplentes
         </span>
       </div>
     </section>

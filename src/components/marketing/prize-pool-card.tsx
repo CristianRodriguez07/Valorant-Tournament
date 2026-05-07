@@ -1,8 +1,8 @@
 import { Shield, Trophy, Zap } from "lucide-react";
 
 const rewards = [
-  ["Top 1", "$2,800", Trophy],
-  ["Top 2", "$1,400", Shield],
+  ["Puesto 1", "$2,800", Trophy],
+  ["Puesto 2", "$1,400", Shield],
   ["MVP", "$800", Zap],
 ] as const;
 
@@ -11,12 +11,12 @@ export function PrizePoolCard() {
     <div className="arena-panel p-5">
       <div className="arena-kicker flex items-center gap-2">
         <Trophy className="size-4" />
-        Total prize pool
+        Bolsa total de premios
       </div>
 
       <div className="arena-display mt-5 text-6xl leading-none text-valorant-bone">$5,000</div>
       <p className="mt-3 text-sm font-semibold leading-6 text-valorant-muted">
-        Reparto top 3, rewards para MVP y slot invitado para el próximo qualifier.
+        Reparto para los tres mejores, recompensas para MVP y plaza invitada para el próximo clasificatorio.
       </p>
 
       <div className="mt-6 grid gap-2">

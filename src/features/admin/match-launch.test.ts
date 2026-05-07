@@ -18,7 +18,7 @@ assert.deepEqual(
     bestOf: 1,
     status: "ready",
     scheduledAt: new Date("2026-05-06T19:00:00.000Z"),
-    opponentName: "Ignition Seed Unit",
+    opponentName: "Unidad Cabeza de Serie Ignition",
     opponentSlug: "ignition-seed-2c54f2a0-8ef01c98",
   },
 );
@@ -55,7 +55,7 @@ assert.throws(
       nextMatchNumber: 0,
       scheduledFrom,
     }),
-  /match number/i,
+  /número de partida/i,
 );
 
-console.log("match-launch tests passed");
+console.log("pruebas de lanzamiento de partida superadas");

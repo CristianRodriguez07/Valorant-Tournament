@@ -45,12 +45,12 @@ type RosterSlot = {
 };
 
 const ROSTER_SLOTS: readonly RosterSlot[] = [
-  { position: 1, role: "starter", label: "Titular 1", helper: "Entry / Duelist" },
-  { position: 2, role: "starter", label: "Titular 2", helper: "Controller" },
-  { position: 3, role: "starter", label: "Titular 3", helper: "Initiator" },
-  { position: 4, role: "starter", label: "Titular 4", helper: "Sentinel" },
-  { position: 5, role: "starter", label: "Titular 5", helper: "Flex" },
-  { position: 6, role: "substitute", label: "Suplente", helper: "Backup" },
+  { position: 1, role: "starter", label: "Titular 1", helper: "Entrada / Duelista" },
+  { position: 2, role: "starter", label: "Titular 2", helper: "Controlador" },
+  { position: 3, role: "starter", label: "Titular 3", helper: "Iniciador" },
+  { position: 4, role: "starter", label: "Titular 4", helper: "Centinela" },
+  { position: 5, role: "starter", label: "Titular 5", helper: "Flexible" },
+  { position: 6, role: "substitute", label: "Suplente", helper: "Reserva" },
 ];
 
 function createDefaultValues(tournamentSlug: string): TeamRegistrationClientValues {
@@ -160,15 +160,15 @@ export function TeamRegistrationStepOne({
             <div className="space-y-3">
               <Badge className="arena-panel-soft w-fit rounded-none border-valorant-red/35 bg-valorant-red/10 text-valorant-red hover:bg-valorant-red/10">
                 <Crosshair className="mr-1 size-3.5" />
-                Lock-in protocol
+                Protocolo de cierre
               </Badge>
 
               <div>
                 <CardTitle className="arena-display text-balance text-5xl leading-none md:text-7xl">
-                  Lock your <span className="text-valorant-red">squad</span>
+                  Cierra tu <span className="text-valorant-red">equipo</span>
                 </CardTitle>
                 <CardDescription className="mt-3 max-w-2xl text-base font-medium leading-7 text-valorant-muted">
-                  Paso 1 · Identidad del equipo y roster inicial para{" "}
+                  Paso 1 · Identidad del equipo y plantilla inicial para{" "}
                   <span className="font-semibold text-valorant-bone">{tournamentName}</span>.
                 </CardDescription>
               </div>
@@ -197,7 +197,7 @@ export function TeamRegistrationStepOne({
                 <div className="relative">
                   <Input
                     id="teamName"
-                    placeholder="Ej: Neon Reapers"
+                    placeholder="Ej: Segadores Neón"
                     autoComplete="off"
                     aria-invalid={Boolean(errors.teamName)}
                     className="h-14 rounded-none border-valorant-line/60 bg-valorant-ink/80 pr-12 text-lg font-black uppercase tracking-[0.08em] text-valorant-bone placeholder:text-valorant-muted/45 focus-visible:border-valorant-red focus-visible:ring-valorant-red/40"
@@ -209,7 +209,7 @@ export function TeamRegistrationStepOne({
                 {errors.teamName?.message ? (
                   <p className="text-sm font-semibold text-valorant-red">{errors.teamName.message}</p>
                 ) : (
-                  <p className="text-sm text-valorant-muted">Se usará para slug, bracket y tarjeta pública del equipo.</p>
+                  <p className="text-sm text-valorant-muted">Se usará para el identificador, el cuadro y la tarjeta pública del equipo.</p>
                 )}
               </div>
 
@@ -257,14 +257,14 @@ export function TeamRegistrationStepOne({
                 <div>
                   <div className="flex items-center gap-2">
                     <Users className="size-5 text-valorant-red" />
-                    <h3 className="arena-display text-4xl leading-none">Roster</h3>
+                    <h3 className="arena-display text-4xl leading-none">Plantilla</h3>
                   </div>
                   <p className="mt-1 text-sm text-valorant-muted">Registra 5 titulares + 1 suplente. No se permiten Riot IDs duplicados.</p>
                 </div>
 
                 <Badge variant="outline" className="w-fit rounded-none border-valorant-ember/40 bg-valorant-ember/10 text-valorant-ember">
                   <Zap className="mr-1 size-3.5" />
-                  Formato: Player#LAN
+                  Formato: Jugador#LAN
                 </Badge>
               </div>
 
@@ -301,7 +301,7 @@ export function TeamRegistrationStepOne({
 
                       <Input
                         id={`players.${index}.riotId`}
-                        placeholder={isSubstitute ? "Backup#LAN" : `Player${index + 1}#LAN`}
+                        placeholder={isSubstitute ? "Reserva#LAN" : `Jugador${index + 1}#LAN`}
                         autoComplete="off"
                         spellCheck={false}
                         aria-invalid={Boolean(fieldError)}
@@ -322,7 +322,7 @@ export function TeamRegistrationStepOne({
 
             <div className="flex flex-col gap-3 border-t border-valorant-line/60 pt-6 md:flex-row md:items-center md:justify-between">
               <p className="text-sm text-valorant-muted">
-                Al continuar, el roster quedará en estado <span className="font-semibold text-valorant-bone">pending review</span> hasta validación del admin.
+                Al continuar, la plantilla quedará en estado <span className="font-semibold text-valorant-bone">pendiente de revisión</span> hasta validación de administración.
               </p>
 
               <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.98 }}>

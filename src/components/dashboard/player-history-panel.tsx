@@ -1,6 +1,7 @@
 import { Crown, History, ShieldAlert, Swords } from "lucide-react";
 
 import type { Match, Team, TournamentTeamStanding } from "@/db/schema";
+import { formatStandingStatus } from "@/features/matchday/status";
 
 type HistoryMatch = Match & {
   teamA?: Team | null;
@@ -15,16 +16,16 @@ type PlayerHistoryPanelProps = {
 };
 
 export function PlayerHistoryPanel({ standing, matches, teamId }: PlayerHistoryPanelProps) {
-  const status = standing?.status ? standing.status.replaceAll("_", " ") : "awaiting bracket";
+  const status = standing?.status ? formatStandingStatus(standing.status) : "Esperando cuadro";
 
   return (
     <section className="player-history-panel tactical-reveal">
       <div className="player-history-head">
         <div className="concept-kicker flex items-center gap-2">
           <History className="size-4" />
-          Competitive identity
+          Identidad competitiva
         </div>
-        <span>{standing?.team?.name ?? "Squad record"}</span>
+        <span>{standing?.team?.name ?? "Historial del equipo"}</span>
       </div>
 
       <div className="player-history-record">
@@ -42,7 +43,7 @@ export function PlayerHistoryPanel({ standing, matches, teamId }: PlayerHistoryP
               <article key={match.id} className={won ? "player-history-row player-history-win" : "player-history-row"}>
                 {won ? <Crown className="size-4" /> : pending ? <Swords className="size-4" /> : <ShieldAlert className="size-4" />}
                 <span>
-                  {match.teamA?.name ?? "Waiting"} vs {match.teamB?.name ?? "Waiting"}
+                  {match.teamA?.name ?? "Esperando"} vs {match.teamB?.name ?? "Esperando"}
                 </span>
                 <b>
                   {match.scoreA}-{match.scoreB}
@@ -51,7 +52,7 @@ export function PlayerHistoryPanel({ standing, matches, teamId }: PlayerHistoryP
             );
           })
         ) : (
-          <p>Match history appears after the bracket goes live.</p>
+          <p>El historial de partidas aparecerá cuando el cuadro esté publicado.</p>
         )}
       </div>
     </section>

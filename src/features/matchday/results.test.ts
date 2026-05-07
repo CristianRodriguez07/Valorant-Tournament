@@ -52,4 +52,4 @@ assert.throws(
   /pertenece/i,
 );
 
-console.log("matchday results tests passed");
+console.log("pruebas de resultados del día de partida superadas");

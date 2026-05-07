@@ -27,8 +27,8 @@ type SeedBoardProps = {
 export function SeedBoard({ tournamentId, title, items, hasBracket, hasBlockingMatches = false }: SeedBoardProps) {
   const checkedInCount = items.filter((item) => item.checkedInAt).length;
   const canPublish = !hasBracket && !hasBlockingMatches && items.length >= 2;
-  const publishLabel = hasBracket ? "Bracket published" : hasBlockingMatches ? "Match data exists" : "Publish bracket";
-  const bracketStatus = hasBracket ? "Live" : hasBlockingMatches ? "Legacy" : "Draft";
+  const publishLabel = hasBracket ? "Cuadro publicado" : hasBlockingMatches ? "Existen partidas" : "Publicar cuadro";
+  const bracketStatus = hasBracket ? "En directo" : hasBlockingMatches ? "Antiguo" : "Borrador";
 
   async function publishBracket(formData: FormData) {
     "use server";
@@ -42,7 +42,7 @@ export function SeedBoard({ tournamentId, title, items, hasBracket, hasBlockingM
         <div>
           <div className="arena-kicker flex items-center gap-2">
             <GitBranch className="size-4" />
-            Double elimination seed board
+            Cabezas de serie de doble eliminación
           </div>
           <h2>{title}</h2>
         </div>
@@ -60,11 +60,11 @@ export function SeedBoard({ tournamentId, title, items, hasBracket, hasBlockingM
       </div>
 
       <div className="seed-board-radar" aria-hidden="true">
-        <span>Eligible squads</span>
+        <span>Equipos aptos</span>
         <strong>{items.length}</strong>
-        <span>Checked in</span>
+        <span>Presencia</span>
         <strong>{checkedInCount}</strong>
-        <span>Status</span>
+        <span>Estado</span>
         <strong>{bracketStatus}</strong>
       </div>
 
@@ -77,11 +77,11 @@ export function SeedBoard({ tournamentId, title, items, hasBracket, hasBlockingM
                 <h3>{item.teamName}</h3>
                 <p>
                   <UsersRound className="size-3.5" />
-                  {item.members.length} / 6 players
+                  {item.members.length} / 6 jugadores
                 </p>
                 <p>
                   {item.checkedInAt ? <CheckCircle2 className="size-3.5" /> : <ShieldAlert className="size-3.5" />}
-                  {item.checkedInAt ? "checked in" : formatRegistrationStatus(item.status)}
+                  {item.checkedInAt ? "presencia confirmada" : formatRegistrationStatus(item.status)}
                 </p>
               </div>
             </article>
@@ -89,8 +89,8 @@ export function SeedBoard({ tournamentId, title, items, hasBracket, hasBlockingM
         ) : (
           <article className="seed-board-empty">
             <ShieldAlert className="size-5" />
-            <h3>No eligible squads</h3>
-            <p>Approved and checked-in teams will appear here before the bracket is published.</p>
+            <h3>No hay equipos aptos</h3>
+            <p>Los equipos aprobados y con presencia confirmada aparecerán aquí antes de publicar el cuadro.</p>
           </article>
         )}
       </div>

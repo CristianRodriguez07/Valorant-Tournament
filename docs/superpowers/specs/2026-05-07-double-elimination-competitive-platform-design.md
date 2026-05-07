@@ -1,121 +1,119 @@
-# Double Elimination Competitive Platform Design
+# Diseno de la Plataforma Competitiva de Doble Eliminacion
 
-## Status
+## Estado
 
-Scope approved on 2026-05-07. The selected direction is "Competition + Identity": a real Double Elimination tournament engine, visual bracket surfaces, and the first durable data foundation for player profiles, match history, and ranking.
+Alcance aprobado el 2026-05-07. La direccion elegida es competicion e identidad: motor real de doble eliminacion, superficies visuales de cuadro y primera base duradera para perfiles, historial y clasificacion.
 
-## Problem
+## Problema
 
-The app now has a strong Valorant identity, captain dashboard, roster readiness, admin registration review, captain check-in, match result reporting, disputes, and an admin result desk. The remaining gap is that the tournament itself is not yet a real competitive structure. Admin can launch a match, but the current launch flow creates a placeholder opponent and does not understand seeds, upper bracket, lower bracket, eliminations, byes, grand finals, or automatic advancement.
+La app ya tenia identidad VALORANT, panel de capitan, preparacion de plantilla, revision de administracion, presencia, reporte de resultados, disputas y mesa de resultados. Faltaba que el torneo tuviera una estructura competitiva real. La creacion anterior de partida no entendia cabezas de serie, cuadro superior, cuadro inferior, eliminaciones, descansos, gran final ni avance automatico.
 
-Without bracket truth, every later feature stays shallow:
+Sin verdad de cuadro, las funciones posteriores quedan superficiales:
 
-- Player history cannot know whether a win was upper bracket, lower bracket, elimination, or final.
-- Rankings cannot separate meaningful progression from isolated match records.
-- Admin operations cannot confidently publish a bracket or advance the tournament.
-- Captains cannot understand their full path through the tournament.
+- El historial no distingue si una victoria fue en cuadro superior, inferior, eliminacion o final.
+- La clasificacion no separa progreso real de partidas aisladas.
+- Administracion no puede publicar ni avanzar el torneo con confianza.
+- Capitanes no entienden su camino completo.
 
-## Goals
+## Objetivos
 
-- Generate a Double Elimination bracket from approved or checked-in teams.
-- Use `tournament_registrations.seed` as the first seeding source.
-- Support non-power-of-two team counts through bracket-size calculation and bye advancement.
-- Replace the placeholder match launch path with a bracket publish flow.
-- Advance teams automatically when an admin completes a reported match.
-- Route losing teams from upper bracket into the correct lower bracket slot.
-- Mark teams eliminated after their second loss.
-- Create a visual upper/lower bracket experience for admin and captains.
-- Create match history and ranking foundations from completed matches.
-- Preserve the current Valorant tactical UI language.
+- Generar un cuadro de doble eliminacion desde equipos aprobados o con presencia confirmada.
+- Usar `tournament_registrations.seed` como primera fuente de cabeza de serie.
+- Soportar cantidades no potencia de dos con descansos.
+- Sustituir partida ficticia por publicacion de cuadro.
+- Avanzar equipos automaticamente cuando administracion completa un resultado reportado.
+- Enviar perdedores del cuadro superior a la plaza correcta del inferior.
+- Marcar eliminacion tras segunda derrota.
+- Crear experiencia visual de cuadro superior e inferior.
+- Crear base de historial y clasificacion desde partidas completadas.
+- Preservar la UI tactica VALORANT.
 
-## Non-Goals
+## Fuera de Alcance
 
-- No Swiss, round-robin, or group stage format in this slice.
-- No Discord automation, notifications, proof uploads, or LFG/team finder yet.
-- No Riot API integration or stat import.
-- No real-time sockets; server-rendered refresh and revalidation are enough.
-- No configurable grand-final rule variants. This slice uses one standard rule: if the lower-bracket finalist wins the first Grand Final, the system creates a Reset Final; otherwise the first Grand Final decides champion.
-- No new public overlay or dedicated public bracket route. Public integration is limited to reusing the read-only bracket renderer inside existing surfaces if the implementation plan can do it without adding separate routing scope.
+- Formato suizo, liga o grupos.
+- Automatizacion de Discord.
+- Notificaciones.
+- Subida de pruebas.
+- Busqueda de equipo.
+- API de Riot.
+- Sockets en tiempo real.
+- Variantes configurables de gran final.
+- Ruta publica dedicada para cuadro.
 
-## Users
+## Usuarios
 
-- Admin: seeds teams, publishes the bracket, reviews results/disputes, and advances the tournament.
-- Captain: sees their current match, bracket path, lower-bracket risk, and match history.
-- Player: gains a visible competitive identity through profile/history/ranking data.
-- Visitor: sees a credible tournament bracket instead of static marketing claims.
+- Administracion: asigna cabezas de serie, publica cuadro, revisa resultados y avanza torneo.
+- Capitan: consulta partida actual, ruta de cuadro, riesgo del cuadro inferior e historial.
+- Jugador: gana identidad competitiva mediante historial y clasificacion.
+- Visitante: ve un torneo creible, no solo promesas de marketing.
 
-## Recommended Product Shape
+## Forma del Producto
 
-### Admin Seed Board
+### Tablero de Cabezas de Serie
 
-The admin control room gains a "Seed Board" section for each active tournament. It shows approved and checked-in teams, their roster readiness, registration state, current seed, and bracket eligibility. Admin can publish the bracket only when at least two eligible teams exist.
+La sala de administracion gana una seccion para cada torneo activo. Muestra equipos elegibles, preparacion de plantilla, estado de registro, cabeza de serie actual y aptitud para el cuadro. La publicacion solo se permite con al menos dos equipos.
 
-Initial seeding should be conservative:
+Reglas iniciales:
 
-- Prefer existing `tournament_registrations.seed`.
-- Fill missing seeds by registration approval/check-in order.
-- Prevent duplicate seeds at generation time.
-- Show warnings for missing seeds, duplicate seeds, odd team counts, and teams not checked in.
+- Preferir `tournament_registrations.seed`.
+- Rellenar huecos por orden de aprobacion o presencia.
+- Evitar duplicados durante la generacion.
+- Mostrar avisos de semillas ausentes, duplicadas, cantidad impar y equipos sin presencia.
 
-The first implementation can use deterministic seed assignment instead of drag-and-drop. A polished manual seed editor can follow once bracket generation is stable.
+### Publicacion de Cuadro
 
-### Bracket Publish Flow
+Publicar crea toda la estructura:
 
-Publishing a bracket creates every structural match slot for the tournament:
+- Rondas de cuadro superior.
+- Rondas de cuadro inferior.
+- Gran final.
+- Final de reinicio condicional.
+- Avances por descanso.
+- Plazas futuras vacias que reciben equipos al avanzar.
 
-- Upper bracket rounds.
-- Lower bracket rounds.
-- Grand Final, plus a conditional Reset Final if the lower-bracket finalist wins the first final.
-- Bye-driven automatic advancements.
-- Empty future slots that receive teams as the bracket advances.
+Solo las partidas iniciales con dos equipos quedan listas para jugar. Las futuras permanecen programadas y la UI las muestra como equipos pendientes.
 
-Only first-round ready matches with two assigned teams should be playable. Future matches remain `scheduled` in the database; the UI labels them "Waiting for teams" until both teams are known.
+### Ruta de Capitan
 
-Generation must be idempotent from the admin UI: if a tournament already has bracket matches, the publish action should refuse to create duplicates and instead send the admin to the bracket view.
+El panel y la pagina de cuadro deben mostrar:
 
-### Captain Bracket Path
+- Partida actual y rival.
+- Estado de cuadro superior, cuadro inferior, eliminado o campeon.
+- Posible plaza al ganar y al perder cuando se conozca.
+- Historial con victorias, derrotas y fase.
 
-The captain dashboard and bracket page should stop feeling like a single-match feed. They should show:
+La sala lista sigue siendo la superficie de accion principal; el cuadro es el mapa estrategico.
 
-- Current match and opponent.
-- Whether the team is in upper bracket, lower bracket, eliminated, or champion path.
-- Next possible slot after win and after loss where known.
-- Match history with wins, losses, and bracket stage labels.
+### Cuadro Visual
 
-The ready room remains the primary action surface. The bracket is the strategic map around it.
+Una representacion compartida se adapta por contexto:
 
-### Visual Bracket
+- Administracion: estado, plazas sin resolver, avisos y avance.
+- Capitan: equipo resaltado, partida actual, ruta de peligro y siguiente rival.
+- Publico futuro: lectura limpia tipo retransmision.
 
-Use one shared bracket renderer with context-specific wrappers:
+Direccion visual:
 
-- Admin mode: status, unresolved slots, publish/advance signals, review warnings.
-- Captain mode: highlight my team, current match, danger path, and next opponent.
-- Public mode later: cleaner broadcast-style read-only bracket.
+- Cuadro superior como carril principal iluminado en rojo.
+- Cuadro inferior como carril compacto de supervivencia.
+- Marcadores de eliminacion y momento de campeon.
+- Tarjetas de partida con equipo, cabeza de serie, marcador, estado y formato.
+- Sin pilas de tarjetas anidadas.
 
-The visual shape should emphasize Valorant tournament drama:
+## Arquitectura
 
-- Upper bracket as the main red-lit lane.
-- Lower bracket as a compressed survival lane.
-- Elimination markers and champion moment.
-- Match cards with team names, seed, score, status, and best-of.
-- No nested card stacks; use full-width tactical lanes and single-level match nodes.
+Modulos nuevos:
 
-## Architecture
+- `src/features/brackets/double-elimination.ts`
+- `src/features/brackets/double-elimination.test.ts`
+- `src/features/brackets/types.ts`
+- `src/features/brackets/actions.ts`
+- `src/features/profiles/queries.ts`
+- `src/components/dashboard/double-elim-bracket.tsx`
+- `src/components/dashboard/seed-board.tsx`
+- `src/components/dashboard/player-history-panel.tsx`
 
-Keep the app server-first with pure bracket logic isolated from database writes.
-
-New modules:
-
-- `src/features/brackets/double-elimination.ts`: pure bracket generation and advancement helpers.
-- `src/features/brackets/double-elimination.test.ts`: tests for seeds, byes, lower drops, grand final, and advancement.
-- `src/features/brackets/types.ts`: structural types shared by generator, queries, and UI.
-- `src/features/brackets/actions.ts`: admin server actions for publishing and advancing bracket state.
-- `src/features/profiles/queries.ts`: player and team history/ranking query foundation.
-- `src/components/dashboard/double-elim-bracket.tsx`: shared bracket renderer.
-- `src/components/dashboard/seed-board.tsx`: admin seed/publish surface.
-- `src/components/dashboard/player-history-panel.tsx`: first history/ranking panel for dashboard or profile surface.
-
-Existing modules to extend:
+Modulos existentes a ampliar:
 
 - `src/db/schema.ts`
 - `src/features/admin/actions.ts`
@@ -126,197 +124,149 @@ Existing modules to extend:
 - `src/app/(dashboard)/dashboard/brackets/page.tsx`
 - `src/app/(dashboard)/dashboard/page.tsx`
 
-## Data Model
+## Modelo de Datos
 
-The current `matches` table can store basic tournament matches, but it cannot represent Double Elimination structure safely. Add explicit bracket metadata rather than overloading `round` and `matchNumber`.
+Campos anadidos a `matches`:
 
-Recommended schema additions:
+- `bracket`: `upper`, `lower`, `grand_final`, `grand_final_reset`.
+- `bracketRound`.
+- `bracketMatchNumber`.
+- `nextMatchId`.
+- `nextMatchSlot`: `team_a`, `team_b`.
+- `loserNextMatchId`.
+- `loserNextMatchSlot`: `team_a`, `team_b`.
+- `sourceMatchAId`.
+- `sourceMatchBId`.
 
-### Match Fields
+Tabla `tournament_team_standings`:
 
-- `bracket` enum: `upper`, `lower`, `grand_final`, `grand_final_reset`.
-- `bracketRound` integer.
-- `bracketMatchNumber` integer.
-- `nextMatchId` nullable uuid referencing `matches.id`.
-- `nextMatchSlot` enum: `team_a`, `team_b`.
-- `loserNextMatchId` nullable uuid referencing `matches.id`.
-- `loserNextMatchSlot` enum: `team_a`, `team_b`.
-- `sourceMatchAId` nullable uuid referencing `matches.id`.
-- `sourceMatchBId` nullable uuid referencing `matches.id`.
+- Torneo.
+- Equipo.
+- Cabeza de serie.
+- Victorias.
+- Derrotas.
+- Estado: `active`, `lower_bracket`, `eliminated`, `runner_up`, `champion`.
+- Ultima partida.
+- Fechas.
 
-Keep existing `round` and `matchNumber` as display/backward-compatible ordering fields during the migration. New code should prefer bracket metadata.
+Tabla `tournament_player_snapshots`:
 
-### Team Standing Table
+- Torneo.
+- Equipo.
+- Usuario opcional.
+- Riot ID.
+- Rol.
+- Capitania.
+- Cabeza de serie.
+- Fechas.
 
-Add `tournament_team_standings`:
+## Reglas de Generacion
 
-- `id`
-- `tournamentId`
-- `teamId`
-- `seed`
-- `wins`
-- `losses`
-- `status`: `active`, `lower_bracket`, `eliminated`, `runner_up`, `champion`
-- `lastMatchId`
-- timestamps
+1. Cargar inscripciones elegibles.
+2. Ordenar por cabeza de serie ascendente.
+3. Calcular tamano como siguiente potencia de dos.
+4. Colocar equipos con emparejamiento equilibrado.
+5. Crear primera ronda de cuadro superior.
+6. Crear rondas futuras, cuadro inferior y gran final.
+7. Conectar ganadores.
+8. Conectar perdedores.
+9. Avanzar ganadores del cuadro inferior.
+10. Conectar finalistas a gran final.
+11. Crear final de reinicio solo si corresponde.
+12. Avanzar descansos automaticamente.
+13. Crear clasificacion y capturas en la misma transaccion.
 
-This table makes captain dashboards, rankings, and admin summaries cheap and clear.
+## Reglas de Avance
 
-### Player Snapshot Table
+Cuando administracion completa una partida reportada:
 
-Add `tournament_player_snapshots`:
+1. Validar que el estado sea `reported`.
+2. Validar que el ganador pertenezca a la partida.
+3. Calcular perdedor.
+4. Marcar partida como completada.
+5. Sumar victoria al ganador.
+6. Sumar derrota al perdedor.
+7. Mover ganador a su siguiente plaza.
+8. Mover perdedor a su plaza inferior si existe.
+9. Marcar eliminado si acumula dos derrotas.
+10. Resolver campeon o subcampeon en gran final.
+11. Crear final de reinicio si gana el finalista del cuadro inferior.
+12. Marcar lista una partida cuando ya tenga dos equipos.
+13. Revalidar rutas de administracion, panel, cuadro, plantilla y publica.
 
-- `id`
-- `tournamentId`
-- `teamId`
-- `userId` nullable
-- `riotId`
-- `riotIdNormalized`
-- `role`
-- `isCaptain`
-- `seed`
-- timestamps
+## Historial y Clasificacion
 
-Snapshots preserve identity even if a user edits their Riot ID or a roster changes after bracket publish.
+La fase no construye un producto social completo, pero deja superficies utiles:
 
-## Bracket Generation Rules
+- Panel de capitan con registro del equipo.
+- Pagina de cuadro con historial de partidas del equipo.
+- Pagina de administracion con clasificacion ordenada.
+- Consultas reutilizables para futuras rutas de perfil.
 
-1. Load eligible registrations for one tournament.
-2. Sort by seed ascending. For missing seeds, append by approval/check-in time.
-3. Calculate bracket size as the next power of two.
-4. Place teams using standard seed pairing: `1 vs N`, `4 vs 5`, `3 vs 6`, `2 vs N-1` style for balanced halves.
-5. Create upper bracket round one matches from seed pairings.
-6. Create all future upper, lower, and grand-final match slots.
-7. Connect each upper match winner to its next upper slot.
-8. Connect each upper match loser to the correct lower slot.
-9. Connect lower match winners through the lower bracket.
-10. Connect the lower final winner and upper final winner to Grand Final.
-11. Do not pre-create the Reset Final; create it only if the lower-bracket finalist wins the first Grand Final.
-12. Auto-advance byes before returning success.
-13. Create standings and player snapshots in the same transaction.
+Orden de clasificacion:
 
-The pure generator should return a full bracket plan without touching the database. The server action writes that plan transactionally.
+1. Campeon.
+2. Equipos activos en cuadro superior.
+3. Equipos activos en cuadro inferior.
+4. Equipos eliminados por profundidad, victorias y cabeza de serie.
 
-## Advancement Rules
+No se inventa ELO en esta fase; la posicion del torneo es suficiente.
 
-When admin completes a reported match:
+## Errores
 
-1. Validate match status is `reported`.
-2. Validate winner belongs to the match.
-3. Compute loser.
-4. Update completed match.
-5. Increment winner standing wins.
-6. Increment loser standing losses.
-7. If the completed match has `nextMatchId`, place winner in `nextMatchSlot`.
-8. If the completed match has `loserNextMatchId`, place loser in `loserNextMatchSlot`.
-9. If loser has two losses before finals, mark eliminated.
-10. If completed match is Grand Final and the upper-bracket finalist wins, mark winner champion, loser runner-up, and tournament completed.
-11. If completed match is Grand Final and the lower-bracket finalist wins, create a Reset Final with the same teams and set it `ready`.
-12. If completed match is Reset Final, mark winner champion, loser runner-up, and tournament completed.
-13. Set newly filled matches to `ready` when both teams are assigned.
-14. Revalidate admin, dashboard, bracket, roster, and public pages.
+- Publicar requiere rol de administracion.
+- Publicar requiere al menos dos equipos elegibles.
+- Publicar rechaza cuadros duplicados.
+- Completar falla si la partida esta disputada, completada o sin ganador valido.
+- El avance falla de forma transaccional.
+- Capitanes sin cuadro ven estado pendiente.
+- Equipos eliminados ven historial y posicion final.
 
-Disputed matches should never advance automatically.
+## Pruebas
 
-## Player Profiles, History, And Ranking Foundation
+Pruebas puras:
 
-This slice should not build a full social profile product, but it should create useful surfaces immediately:
+- Dos equipos con gran final y final de reinicio condicional.
+- Cuatro equipos con cuadro superior, inferior y gran final.
+- Seis equipos con descansos.
+- Semillas duplicadas o ausentes resueltas de forma determinista.
+- Perdedor de cuadro superior cae a plaza inferior correcta.
+- Perdedor de cuadro inferior queda eliminado.
+- Ganador de gran final desde cuadro superior queda campeon.
+- Ganador de gran final desde cuadro inferior crea final de reinicio.
+- Disputas y estados no avanzan incorrectamente.
 
-- Captain dashboard: "Team record" block from standings.
-- Bracket page: per-match history for the current team.
-- Admin page: standings table sorted by champion/active/eliminated, wins, losses, seed.
-- Future profile route foundation: queries that can return a user's tournament appearances by Riot ID or user ID.
+Verificacion manual:
 
-Ranking should be simple and explainable:
+```powershell
+pnpm lint
+pnpm typecheck
+pnpm build
+```
 
-1. Champion.
-2. Active upper-bracket teams.
-3. Active lower-bracket teams.
-4. Eliminated teams by placement proxy: deeper bracket progress, then wins, then seed.
+Rutas:
 
-Do not invent ELO yet. Tournament placement is enough for this phase.
+- `/`
+- `/sign-in`
+- `/dashboard`
+- `/dashboard/brackets`
+- `/dashboard/admin`
 
-## Error Handling
+## Criterios de Aceptacion
 
-- Publishing requires admin role.
-- Publishing requires at least two eligible teams.
-- Publishing refuses duplicate bracket creation for the same tournament.
-- Publishing reports exact invalid seed problems.
-- Completing a match fails closed if the match is disputed, already completed, or has no valid winner.
-- Advancement fails transactionally; no partial winner/loser movement.
-- Captains without a bracket see the existing pending bracket copy.
-- Captains eliminated from the bracket see history and final placement, not active match actions.
+- Administracion publica cuadro desde equipos aprobados o con presencia.
+- El sistema crea cuadro superior, inferior y gran final.
+- Los descansos se manejan automaticamente.
+- Completar una partida mueve ganador y perdedor correctamente.
+- Dos derrotas eliminan.
+- La gran final marca campeon o crea final de reinicio.
+- Capitanes ven partida actual, posicion e historial.
+- Administracion ve clasificacion y salud del cuadro.
+- La UI conserva la estetica tactica VALORANT.
 
-## Testing
+## Decisiones Cerradas
 
-Pure unit tests:
-
-- 2-team bracket supports a Grand Final and conditional Reset Final.
-- 4-team bracket creates upper, lower, and grand-final slots.
-- 6-team bracket creates byes and auto-advances them.
-- Duplicate/missing seeds resolve deterministically.
-- Upper-bracket loser drops to the correct lower slot.
-- Lower-bracket loser is eliminated.
-- Grand Final upper-side winner becomes champion without reset.
-- Grand Final lower-side winner creates a Reset Final.
-- Reset Final winner becomes champion.
-- Disputed/reported/completed status transitions do not advance incorrectly.
-
-Integration-style checks:
-
-- Admin publish creates matches, standings, and player snapshots in one flow.
-- Admin completing a reported match advances winner and loser correctly.
-- Captain current match query finds the next ready match.
-- Dashboard history query includes completed matches.
-
-Manual verification:
-
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm build`
-- Browser sanity on `/`, `/sign-in`, `/dashboard`, `/dashboard/brackets`, `/dashboard/admin`.
-- Admin publishes bracket from existing approved teams.
-- Captain reports result; admin completes; next bracket slot updates.
-
-## Implementation Slices
-
-### Slice 1: Pure Bracket Engine
-
-Build and test the generator/advancement helpers with no UI and no database writes. This is the risk-control slice.
-
-### Slice 2: Schema And Publish Action
-
-Add bracket metadata, standings, and snapshots. Replace placeholder match launch with bracket publish while preserving existing admin review and result desk behavior.
-
-### Slice 3: Visual Bracket And Admin Seed Board
-
-Add the admin seed board and shared Double Elim bracket renderer. Admin can see bracket health, current matches, unresolved slots, and completion path.
-
-### Slice 4: Captain Path And History
-
-Upgrade captain bracket/dashboard surfaces with current path, record, lower-bracket danger, elimination/champion states, and completed match history.
-
-### Slice 5: Ranking Foundation
-
-Add standings/ranking panels using the new standings table and completed match history. Keep ranking tournament-based, not ELO-based.
-
-## Acceptance Criteria
-
-- Admin can publish a Double Elimination bracket from approved or checked-in teams.
-- The system creates upper bracket, lower bracket, and grand-final match slots.
-- Byes are handled without manual admin edits.
-- Completing a reported match advances winner and loser to the correct next slots.
-- Losing twice eliminates a team.
-- The Grand Final winner is marked champion unless a Reset Final is required.
-- If the lower-bracket finalist wins Grand Final one, a Reset Final is created and decides champion.
-- Captain pages show current match, bracket position, and match history.
-- Admin pages show standings and bracket health.
-- Existing check-in, report, dispute, reset, and complete flows keep working.
-- The UI remains visually consistent with the current Valorant tactical theme.
-
-## Open Decisions Locked For This Spec
-
-- The first Grand Final uses one standard reset condition: only a lower-bracket finalist win creates the Reset Final.
-- Seeding is deterministic and form-based, not drag-and-drop.
-- Ranking is tournament-placement based, not ELO.
-- Discord, proof uploads, and LFG stay out of scope until the later operations/social slice.
+- La gran final usa reinicio solo si gana el finalista del cuadro inferior.
+- La asignacion de cabezas de serie es determinista, no de arrastrar y soltar.
+- La clasificacion se basa en posicion de torneo, no en ELO.
+- Discord, pruebas y busqueda de equipo quedan fuera hasta una fase posterior.

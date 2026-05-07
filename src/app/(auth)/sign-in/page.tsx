@@ -15,13 +15,13 @@ import { authProviderAvailability } from "@/lib/auth-providers";
 
 export const metadata: Metadata = {
   title: "Entrar",
-  description: "Accede a Valorant Arena para gestionar tu roster y tus brackets.",
+  description: "Accede a Valorant Arena para gestionar tu plantilla y tus cuadros.",
 };
 
 const arenaStats = [
-  ["Teams", "128"],
-  ["Rounds", "∞"],
-  ["Glory", "1"],
+  ["Equipos", "128"],
+  ["Rondas", "∞"],
+  ["Gloria", "1"],
 ] as const;
 
 export default async function SignInPage() {
@@ -50,8 +50,8 @@ export default async function SignInPage() {
 
       <section className="signin-concept-stage">
         <Link href="/register" className="signin-register-callout">
-          <span>New to Ignition Cup?</span>
-          <strong>Register your squad</strong>
+          <span>¿Nuevo en Ignition Cup?</span>
+          <strong>Inscribe tu equipo</strong>
           <ArrowRight className="size-4" />
         </Link>
 
@@ -63,19 +63,19 @@ export default async function SignInPage() {
           <div>
             <div className="signin-concept-kicker">
               <ShieldCheck className="size-5" />
-              Secure access
+              Acceso seguro
             </div>
             <h1 className="signin-concept-title">
-              Enter
-              <span>the arena</span>
+              Entra
+              <span>a la arena</span>
             </h1>
             <p>
-              Log in to manage your squad, track your tournament journey, and compete for glory.
-              <strong>The arena is waiting.</strong>
+              Inicia sesión para gestionar tu equipo, seguir tu recorrido en el torneo y competir por la gloria.
+              <strong>La arena está esperando.</strong>
             </p>
           </div>
 
-          <div className="signin-left-stats" aria-label="Tournament access stats">
+          <div className="signin-left-stats" aria-label="Estadísticas de acceso al torneo">
             {arenaStats.map(([label, value]) => (
               <div key={label} className="signin-left-stat">
                 <Crosshair className="size-5" />
@@ -89,8 +89,8 @@ export default async function SignInPage() {
         <div className="signin-concept-console">
           <div className="signin-console-head">
             <div>
-              <div className="signin-concept-kicker">Welcome back, competitor</div>
-              <h2>Sign in to your account</h2>
+              <div className="signin-concept-kicker">Bienvenido de nuevo, competidor</div>
+              <h2>Inicia sesión en tu cuenta</h2>
             </div>
           </div>
 
@@ -106,7 +106,7 @@ export default async function SignInPage() {
                   <span className="signin-provider-logo signin-provider-logo-google">
                     <Image src="/brand/google-g.png" alt="" width={24} height={24} />
                   </span>
-                  Continue with Google
+                  Continuar con Google
                   <ArrowRight className="size-4" />
                 </Button>
               </form>
@@ -123,7 +123,7 @@ export default async function SignInPage() {
                   <span className="signin-provider-logo signin-provider-logo-discord">
                     <Image src="/brand/discord-symbol.svg" alt="" width={28} height={21} />
                   </span>
-                  Continue with Discord
+                  Continuar con Discord
                   <ArrowRight className="size-4" />
                 </Button>
               </form>
@@ -139,24 +139,24 @@ export default async function SignInPage() {
 
           <div className="signin-console-divider">
             <span />
-            <b>Or</b>
+            <b>O</b>
             <span />
           </div>
 
           <div className="signin-email-block" aria-disabled="true">
             <div className="signin-email-heading">
               <Mail className="size-5" />
-              <span>Email magic link</span>
+              <span>Enlace seguro por correo</span>
             </div>
-            <p>We&apos;ll send you a secure sign-in link to your email.</p>
+            <p>Te enviaremos un enlace seguro de acceso a tu correo.</p>
             <div className="signin-email-field">
-              <input type="email" placeholder="Enter your email address" disabled aria-label="Email magic link disabled" />
+              <input type="email" placeholder="Introduce tu correo" disabled aria-label="Enlace por correo deshabilitado" />
               <Mail className="size-5" />
             </div>
             <button type="button" disabled>
-              Send magic link <ArrowRight className="size-4" />
+              Enviar enlace <ArrowRight className="size-4" />
             </button>
-            <small>No password required. Magic link expires in 15 minutes.</small>
+            <small>Sin contraseña. El enlace caduca en 15 minutos.</small>
           </div>
 
           <div className="signin-secure-session">
@@ -164,20 +164,20 @@ export default async function SignInPage() {
               <ShieldCheck className="size-7" />
             </div>
             <div>
-              <div className="signin-secure-title">Secure session</div>
-              <p>256-bit encryption · DDoS protected · Anti-cheat enabled</p>
-              <span>Your data is protected. Your competition is fair.</span>
+              <div className="signin-secure-title">Sesión segura</div>
+              <p>Cifrado de 256 bits · Protección DDoS · Antitrampas activo</p>
+              <span>Tus datos están protegidos. La competición es justa.</span>
             </div>
           </div>
         </div>
       </section>
 
       <footer className="signin-page-footer">
-        <span>This tournament is not affiliated with or sponsored by Riot Games, Inc.</span>
+        <span>Este torneo no está afiliado ni patrocinado por Riot Games, Inc.</span>
         <span>
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms of Service</a>
-          <a href="#support">Support</a>
+          <a href="#privacy">Privacidad</a>
+          <a href="#terms">Condiciones</a>
+          <a href="#support">Soporte</a>
         </span>
       </footer>
     </main>

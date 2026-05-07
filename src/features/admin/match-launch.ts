@@ -25,11 +25,11 @@ const ELIGIBLE_STATUSES = new Set<TournamentRegistration["status"]>([
 
 export function resolveAdminMatchLaunch(input: AdminMatchLaunchInput): AdminMatchLaunchPlan {
   if (!ELIGIBLE_STATUSES.has(input.registrationStatus)) {
-    throw new Error("La inscripcion debe estar aprobada antes de lanzar partida.");
+    throw new Error("La inscripción debe estar aprobada antes de lanzar partida.");
   }
 
   if (!Number.isInteger(input.nextMatchNumber) || input.nextMatchNumber < 1) {
-    throw new Error("Match number must be a positive integer.");
+    throw new Error("El número de partida debe ser un entero positivo.");
   }
 
   return {
@@ -38,7 +38,7 @@ export function resolveAdminMatchLaunch(input: AdminMatchLaunchInput): AdminMatc
     bestOf: 1,
     status: "ready",
     scheduledAt: new Date(input.scheduledFrom.getTime() + 60 * 60 * 1000),
-    opponentName: "Ignition Seed Unit",
+    opponentName: "Unidad Cabeza de Serie Ignition",
     opponentSlug: `ignition-seed-${idSegment(input.tournamentId)}-${idSegment(input.teamId)}`,
   };
 }

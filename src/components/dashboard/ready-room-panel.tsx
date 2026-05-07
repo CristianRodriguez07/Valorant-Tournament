@@ -35,28 +35,28 @@ export function ReadyRoomPanel({
       <div className="ready-room-copy">
         <div className="concept-kicker flex items-center gap-2">
           <RadioTower className="size-4" />
-          Matchday ready room
+          Sala lista del día de partida
         </div>
-        <h2>{match ? "Lobby protocol" : "Bracket signal pending"}</h2>
+        <h2>{match ? "Protocolo de sala" : "Señal de cuadro pendiente"}</h2>
         <p>{actionState.description}</p>
       </div>
 
       <div className="ready-room-versus">
         <div>
           <span>Alpha</span>
-          <strong>{match?.teamA?.name ?? "TBA"}</strong>
+          <strong>{match?.teamA?.name ?? "Por anunciar"}</strong>
         </div>
         <Swords className="size-7 text-valorant-red" />
         <div>
           <span>Omega</span>
-          <strong>{match?.teamB?.name ?? "TBA"}</strong>
+          <strong>{match?.teamB?.name ?? "Por anunciar"}</strong>
         </div>
       </div>
 
       <div className="ready-room-actions">
         <div className="ready-room-time">
           <CalendarClock className="size-4" />
-          {match?.scheduledAt ? formatMatchDate(match.scheduledAt) : "Schedule awaiting admin publish"}
+          {match?.scheduledAt ? formatMatchDate(match.scheduledAt) : "Horario pendiente de publicación"}
         </div>
 
         <form action={checkInCaptainTeamFromForm}>
@@ -76,7 +76,7 @@ export function ReadyRoomPanel({
             variant="outline"
             className="arena-button-outline h-12 rounded-none px-6 font-black uppercase tracking-[0.16em]"
           >
-            <Link href="/dashboard/brackets">Open match feed</Link>
+            <Link href="/dashboard/brackets">Abrir canal de partidas</Link>
           </Button>
         ) : null}
       </div>

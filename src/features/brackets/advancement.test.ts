@@ -115,13 +115,13 @@ assert.deepEqual(
   },
 );
 
-assert.throws(() => resolveMatchAdvancement(match({ status: "ready" })), /reported/i);
-assert.throws(() => resolveMatchAdvancement(match({ winnerTeamId: null })), /winner/i);
-assert.throws(() => resolveMatchAdvancement(match({ winnerTeamId: "team-charlie" })), /match teams/i);
-assert.throws(() => resolveMatchAdvancement(match({ teamAId: null })), /two teams/i);
+assert.throws(() => resolveMatchAdvancement(match({ status: "ready" })), /reportadas/i);
+assert.throws(() => resolveMatchAdvancement(match({ winnerTeamId: null })), /ganador/i);
+assert.throws(() => resolveMatchAdvancement(match({ winnerTeamId: "team-charlie" })), /equipos de la partida/i);
+assert.throws(() => resolveMatchAdvancement(match({ teamAId: null })), /dos equipos/i);
 assert.throws(
   () => resolveMatchAdvancement(match({ teamAId: null, teamBId: null })),
-  /two teams/i,
+  /dos equipos/i,
 );
 
-console.log("advancement rules tests passed");
+console.log("pruebas de avance superadas");

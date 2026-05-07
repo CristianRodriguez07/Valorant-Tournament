@@ -3,22 +3,22 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays, Crosshair, GitFork, Globe2, LogIn, Play, Trophy } from "lucide-react";
 
 const railStats = [
-  ["Teams", "128"],
-  ["Rounds", "∞"],
-  ["Glory", "1"],
+  ["Equipos", "128"],
+  ["Rondas", "∞"],
+  ["Gloria", "1"],
 ] as const;
 
 const countdown = [
-  ["07", "Days"],
-  ["14", "Hrs"],
-  ["36", "Mins"],
-  ["52", "Secs"],
+  ["07", "Días"],
+  ["14", "Horas"],
+  ["36", "Min"],
+  ["52", "Seg"],
 ] as const;
 
 const protocols = [
-  [Crosshair, "5v5 competitive"],
-  [GitFork, "Double elimination"],
-  [Globe2, "All regions eligible"],
+  [Crosshair, "5v5 competitivo"],
+  [GitFork, "Doble eliminación"],
+  [Globe2, "Todas las regiones admitidas"],
 ] as const;
 
 export function HeroSection() {
@@ -28,23 +28,23 @@ export function HeroSection() {
       <div className="coded-concept-lines" aria-hidden="true" />
 
       <header className="coded-concept-topbar">
-        <Link href="/" className="coded-concept-logo" aria-label="Ignition Cup home">
+        <Link href="/" className="coded-concept-logo" aria-label="Inicio de Ignition Cup">
           <span className="v-mark" aria-hidden="true" />
         </Link>
 
-        <nav className="coded-concept-nav" aria-label="Marketing navigation">
-          <a href="#premios" className="is-active">Tournaments</a>
-          <a href="#leaderboard">Leaderboard</a>
-          <a href="#news">News</a>
-          <a href="#operaciones">About</a>
+        <nav className="coded-concept-nav" aria-label="Navegación pública">
+          <a href="#premios" className="is-active">Torneos</a>
+          <a href="#leaderboard">Clasificación</a>
+          <a href="#news">Noticias</a>
+          <a href="#operaciones">Sistema</a>
         </nav>
 
         <div className="coded-concept-auth">
           <Link href="/sign-in" className="coded-concept-button coded-concept-button-dark">
-            Log in <LogIn className="size-4" />
+            Entrar <LogIn className="size-4" />
           </Link>
           <Link href="/register" className="coded-concept-button coded-concept-button-red">
-            Register squad <ArrowRight className="size-4" />
+            Inscribir equipo <ArrowRight className="size-4" />
           </Link>
         </div>
       </header>
@@ -52,7 +52,7 @@ export function HeroSection() {
       <div className="coded-concept-copy">
         <div className="coded-concept-kicker">
           <strong>5v5</strong>
-          <span>Tactical esports tournament</span>
+          <span>Torneo táctico de deportes electrónicos</span>
         </div>
 
         <h1 id="coded-concept-title" className="coded-concept-title">
@@ -63,11 +63,11 @@ export function HeroSection() {
         <div className="coded-concept-legacy">
           <span aria-hidden="true" />
           <p>
-            Assemble your squad.
+            Reúne a tu equipo.
             <br />
-            Prove your strategy.
+            Demuestra tu estrategia.
             <br />
-            Ignite your legacy.
+            Enciende tu legado.
           </p>
         </div>
       </div>
@@ -84,7 +84,7 @@ export function HeroSection() {
         <div className="coded-concept-art-mark" />
       </div>
 
-      <aside className="coded-concept-rail" aria-label="Tournament stats">
+      <aside className="coded-concept-rail" aria-label="Estadísticas del torneo">
         {railStats.map(([label, value]) => (
           <div key={label} className="coded-concept-rail-item">
             <span>{label}</span>
@@ -96,10 +96,10 @@ export function HeroSection() {
 
       <div className="coded-concept-actions">
         <Link href="/register" className="coded-concept-primary">
-          Register squad <ArrowRight className="size-5" />
+          Inscribir equipo <ArrowRight className="size-5" />
         </Link>
         <a href="#formato" className="coded-concept-secondary">
-          <Play className="size-4" /> View format <ArrowRight className="size-4" />
+          <Play className="size-4" /> Ver formato <ArrowRight className="size-4" />
         </a>
       </div>
 
@@ -107,7 +107,7 @@ export function HeroSection() {
         <div className="coded-concept-countdown">
           <div className="coded-concept-panel-title">
             <CalendarDays className="size-5" />
-            Tournament starts in
+            El torneo empieza en
           </div>
           <div className="coded-concept-count-grid">
             {countdown.map(([value, label]) => (
@@ -133,10 +133,10 @@ export function HeroSection() {
         <div>
           <div className="coded-concept-panel-title">
             <Trophy className="size-5" />
-            Total prize pool
+            Bolsa total de premios
           </div>
           <div className="coded-concept-prize-amount">$25,000</div>
-          <div className="coded-concept-prize-strip">+ exclusive champion rewards</div>
+          <div className="coded-concept-prize-strip">+ recompensas exclusivas de campeón</div>
         </div>
         <div className="coded-concept-trophy" aria-hidden="true">
           <span />
@@ -146,7 +146,7 @@ export function HeroSection() {
       </div>
 
       <footer className="coded-concept-footer">
-        <span>Ignite the field</span>
+        <span>Enciende el campo</span>
         <span aria-hidden="true">
           <b />
           <b />

@@ -1,7 +1,7 @@
-Coloca aquí tu video de fondo:
+Coloca aquí tu vídeo de fondo:
 
 ```txt
 hero-loop.mp4
 ```
 
-Usa assets propios o licenciados. No se incluye material propietario de Riot.
+Usa recursos propios o licenciados. No se incluye material propietario de Riot.

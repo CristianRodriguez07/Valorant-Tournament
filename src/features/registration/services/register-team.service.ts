@@ -81,7 +81,7 @@ export async function registerTeam(input: RegisterTeamInput): Promise<{ teamId: 
       throw new RegistrationError("El torneo ya alcanzó el máximo de equipos.");
     }
 
-    const slugBase = slugify(input.teamName) || "team";
+    const slugBase = slugify(input.teamName) || "equipo";
     const slug = `${slugBase}-${crypto.randomUUID().slice(0, 8)}`;
 
     const [team] = await tx
