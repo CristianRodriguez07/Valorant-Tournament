@@ -1,12 +1,28 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, ShieldCheck, Trophy } from "lucide-react";
+import { ArrowRight, CalendarClock, Lock, Trophy } from "lucide-react";
 
 import { auth } from "@/auth";
-import { Badge } from "@/components/ui/badge";
+import { AdminSignalCard } from "@/components/dashboard/admin-signal-card";
+import { MissionFeed } from "@/components/dashboard/mission-feed";
+import { PlayerHistoryPanel } from "@/components/dashboard/player-history-panel";
+import { ReadyRoomPanel } from "@/components/dashboard/ready-room-panel";
+import { SquadIntegrityPanel } from "@/components/dashboard/squad-integrity-panel";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getDashboardRegistrations } from "@/features/tournaments/queries";
+import { formatRegistrationStatus } from "@/features/registration/status";
+import { getNextMatchForTeam, getRosterForTeam } from "@/features/brackets/queries";
+import { buildMissionItems, formatMatchDate } from "@/features/matchday/status";
+import { getTeamTournamentHistory, getTeamTournamentStanding } from "@/features/profiles/queries";
+import { getCaptainMission } from "@/features/tournaments/queries";
+
+const agentProfiles = [
+  ["Duelist", "Kraken"],
+  ["Initiator", "Rift"],
+  ["Sentinel", "Wraith"],
+  ["Controller", "Spectre"],
+  ["Duelist", "Nova"],
+  ["Support", "Aegis"],
+] as const;
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -15,66 +31,107 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
 
-  const registrations = await getDashboardRegistrations(session.user.id);
-  const activeRegistration = registrations[0];
+  const activeRegistration = await getCaptainMission(session.user.id);
+  const team = activeRegistration ? await getRosterForTeam(activeRegistration.teamId) : null;
+  const nextMatch = activeRegistration ? await getNextMatchForTeam(activeRegistration.teamId) : null;
+  const standing = activeRegistration
+    ? await getTeamTournamentStanding(activeRegistration.tournamentId, activeRegistration.teamId)
+    : null;
+  const history = activeRegistration
+    ? await getTeamTournamentHistory(activeRegistration.tournamentId, activeRegistration.teamId)
+    : [];
+  const members = [...(team?.members ?? [])].sort((a, b) => a.position - b.position);
+  const missionItems = activeRegistration
+    ? buildMissionItems({
+        registrationStatus: activeRegistration.status,
+        memberCount: members.length,
+        checkedInAt: activeRegistration.checkedInAt,
+        nextMatch,
+      })
+    : [];
 
   return (
-    <div className="space-y-6">
-      <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <Badge className="mb-3 border border-valorant-red/30 bg-valorant-red/10 text-valorant-red">
-            <ShieldCheck className="size-3.5" />
-            Player Dashboard
-          </Badge>
-          <h1 className="text-4xl font-black uppercase tracking-[0.12em] text-white md:text-6xl">Panel privado</h1>
-          <p className="mt-3 max-w-2xl text-zinc-400">Estado de inscripción, roster y próximos enfrentamientos.</p>
-        </div>
-
-        <Button asChild className="valorant-glow-button rounded-none font-black uppercase tracking-[0.16em]">
-          <Link href="/register">Nuevo registro <ArrowRight className="size-4" /></Link>
-        </Button>
-      </section>
-
+    <div className="dash-console">
       {activeRegistration ? (
-        <Card className="valorant-card clip-valorant overflow-hidden rounded-2xl py-0">
-          <CardHeader className="border-b border-white/10 bg-black/30 p-6">
-            <CardTitle className="flex items-center gap-3 text-2xl font-black uppercase tracking-[0.12em] text-white">
-              <Trophy className="size-6 text-valorant-red" />
-              {activeRegistration.teamName}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4 p-6 md:grid-cols-3">
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <div className="text-xs uppercase tracking-[0.18em] text-zinc-500">Estado</div>
-              <div className="mt-2 text-2xl font-black text-valorant-red">{activeRegistration.status}</div>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <div className="text-xs uppercase tracking-[0.18em] text-zinc-500">Registro</div>
-              <div className="mt-2 text-2xl font-black text-white">{activeRegistration.createdAt.toLocaleDateString("es-ES")}</div>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <div className="text-xs uppercase tracking-[0.18em] text-zinc-500">Acciones</div>
-              <div className="mt-3 flex gap-2">
-                <Button asChild variant="outline" className="rounded-none border-white/15 bg-black/30 text-white hover:bg-white/10">
-                  <Link href="/dashboard/roster">Roster</Link>
-                </Button>
-                <Button asChild variant="outline" className="rounded-none border-white/15 bg-black/30 text-white hover:bg-white/10">
-                  <Link href="/dashboard/brackets">Brackets</Link>
-                </Button>
+        <>
+          <section className="dash-header">
+            <div>
+              <div className="concept-kicker">Tactical overview</div>
+              <div className="mt-4 flex flex-col gap-4 xl:flex-row xl:items-end">
+                <h1 className="dash-team-title">{activeRegistration.teamName}</h1>
+                <span className="dash-team-id">{formatRegistrationStatus(activeRegistration.status)}</span>
+              </div>
+              <div className="mt-4 flex flex-wrap items-center gap-5 text-sm font-black uppercase tracking-[0.14em] text-valorant-muted">
+                <span className="flex items-center gap-2">
+                  <Lock className="size-4" /> {members.length} / 6 players locked
+                </span>
+                <span className="flex items-center gap-2">
+                  <CalendarClock className="size-4" />
+                  Starts {formatMatchDate(activeRegistration.tournamentStartsAt)}
+                </span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            <div className="dash-season">
+              {activeRegistration.tournamentTitle} {" // "} <strong>{activeRegistration.tournamentStatus}</strong>
+            </div>
+          </section>
+
+          <MissionFeed items={missionItems} />
+
+          <section className="control-room-layout">
+            <ReadyRoomPanel
+              registrationId={activeRegistration.registrationId}
+              registrationStatus={activeRegistration.status}
+              checkedInAt={activeRegistration.checkedInAt}
+              match={nextMatch}
+            />
+            <div className="control-room-side">
+              <SquadIntegrityPanel members={members} />
+              <AdminSignalCard status={formatRegistrationStatus(activeRegistration.status)} />
+            </div>
+          </section>
+
+          <PlayerHistoryPanel standing={standing} matches={history} teamId={activeRegistration.teamId} />
+
+          <section className="dash-roster-head">
+            <div className="concept-kicker">Roster ({members.length}/6)</div>
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-valorant-bone">
+              <Lock className="size-4 text-valorant-red" />
+              Captain mission active
+            </div>
+          </section>
+
+          <section className="dash-roster-grid">
+            {members.slice(0, 6).map((member, index) => {
+              const [agentRole, callSign] = agentProfiles[index] ?? agentProfiles[0];
+
+              return (
+                <article key={member.id} className="dash-agent-card">
+                  <div className="flex items-start justify-between">
+                    <span className="dash-agent-number">{String(member.position).padStart(2, "0")}</span>
+                    <span className="dash-agent-corner" />
+                  </div>
+                  <div className="dash-agent-portrait" style={{ backgroundPosition: `${18 + index * 13}% 48%` }} />
+                  <div className="dash-agent-role">{agentRole}</div>
+                  <h3>{callSign}</h3>
+                  <div className="dash-agent-lock">
+                    Locked <Lock className="size-3" />
+                  </div>
+                  <div className="dash-agent-riot">{member.riotId}</div>
+                </article>
+              );
+            })}
+          </section>
+        </>
       ) : (
-        <Card className="valorant-card rounded-2xl py-0">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-2xl font-black uppercase tracking-[0.12em] text-white">Aún no tienes equipo registrado</h2>
-            <p className="mx-auto mt-3 max-w-xl text-zinc-400">Crea tu squad, sube el logo y registra los Riot IDs para entrar en revisión.</p>
-            <Button asChild className="valorant-glow-button mt-6 rounded-none font-black uppercase tracking-[0.16em]">
-              <Link href="/register">Inscribirme ahora</Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <section className="dash-empty">
+          <Trophy className="size-12 text-valorant-red" />
+          <h1 className="dash-team-title">No squad locked</h1>
+          <p>Crea tu equipo, registra seis Riot IDs y entra en la cola de revisión del torneo.</p>
+          <Button asChild className="arena-button h-12 rounded-none px-7 font-black uppercase tracking-[0.16em]">
+            <Link href="/register">Register squad <ArrowRight className="size-4" /></Link>
+          </Button>
+        </section>
       )}
     </div>
   );
