@@ -14,6 +14,7 @@ import {
   uniqueIndex,
   uuid,
   varchar,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", [
@@ -53,6 +54,23 @@ export const matchStatusEnum = pgEnum("match_status", [
   "reported",
   "disputed",
   "completed",
+]);
+
+export const bracketLaneEnum = pgEnum("bracket_lane", [
+  "upper",
+  "lower",
+  "grand_final",
+  "grand_final_reset",
+]);
+
+export const bracketSlotEnum = pgEnum("bracket_slot", ["team_a", "team_b"]);
+
+export const tournamentStandingStatusEnum = pgEnum("tournament_standing_status", [
+  "active",
+  "lower_bracket",
+  "eliminated",
+  "runner_up",
+  "champion",
 ]);
 
 const timestamps = {
@@ -261,6 +279,15 @@ export const matches = pgTable(
     round: integer("round").notNull(),
     matchNumber: integer("match_number").notNull(),
     bestOf: integer("best_of").default(1).notNull(),
+    bracket: bracketLaneEnum("bracket"),
+    bracketRound: integer("bracket_round"),
+    bracketMatchNumber: integer("bracket_match_number"),
+    nextMatchId: uuid("next_match_id").references((): AnyPgColumn => matches.id, { onDelete: "set null" }),
+    nextMatchSlot: bracketSlotEnum("next_match_slot"),
+    loserNextMatchId: uuid("loser_next_match_id").references((): AnyPgColumn => matches.id, { onDelete: "set null" }),
+    loserNextMatchSlot: bracketSlotEnum("loser_next_match_slot"),
+    sourceMatchAId: uuid("source_match_a_id").references((): AnyPgColumn => matches.id, { onDelete: "set null" }),
+    sourceMatchBId: uuid("source_match_b_id").references((): AnyPgColumn => matches.id, { onDelete: "set null" }),
     teamAId: uuid("team_a_id").references(() => teams.id, { onDelete: "set null" }),
     teamBId: uuid("team_b_id").references(() => teams.id, { onDelete: "set null" }),
     winnerTeamId: uuid("winner_team_id").references(() => teams.id, { onDelete: "set null" }),
@@ -273,7 +300,69 @@ export const matches = pgTable(
   (table) => [
     uniqueIndex("matches_tournament_round_number_unique").on(table.tournamentId, table.round, table.matchNumber),
     index("matches_tournament_status_idx").on(table.tournamentId, table.status),
+    index("matches_bracket_position_idx").on(
+      table.tournamentId,
+      table.bracket,
+      table.bracketRound,
+      table.bracketMatchNumber,
+    ),
+    index("matches_next_match_idx").on(table.nextMatchId),
+    index("matches_loser_next_match_idx").on(table.loserNextMatchId),
     check("matches_best_of_chk", sql`${table.bestOf} IN (1, 3, 5)`),
+  ],
+);
+
+export const tournamentTeamStandings = pgTable(
+  "tournament_team_standings",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    tournamentId: uuid("tournament_id")
+      .notNull()
+      .references(() => tournaments.id, { onDelete: "cascade" }),
+    teamId: uuid("team_id")
+      .notNull()
+      .references(() => teams.id, { onDelete: "cascade" }),
+    seed: integer("seed").notNull(),
+    wins: integer("wins").default(0).notNull(),
+    losses: integer("losses").default(0).notNull(),
+    status: tournamentStandingStatusEnum("status").default("active").notNull(),
+    lastMatchId: uuid("last_match_id").references(() => matches.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (table) => [
+    uniqueIndex("tournament_team_standings_team_unique").on(table.tournamentId, table.teamId),
+    index("tournament_team_standings_rank_idx").on(
+      table.tournamentId,
+      table.status,
+      table.wins,
+      table.losses,
+      table.seed,
+    ),
+  ],
+);
+
+export const tournamentPlayerSnapshots = pgTable(
+  "tournament_player_snapshots",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    tournamentId: uuid("tournament_id")
+      .notNull()
+      .references(() => tournaments.id, { onDelete: "cascade" }),
+    teamId: uuid("team_id")
+      .notNull()
+      .references(() => teams.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+    riotId: varchar("riot_id", { length: 32 }).notNull(),
+    riotIdNormalized: varchar("riot_id_normalized", { length: 64 }).notNull(),
+    role: rosterRoleEnum("role").notNull(),
+    isCaptain: boolean("is_captain").default(false).notNull(),
+    seed: integer("seed").notNull(),
+    ...timestamps,
+  },
+  (table) => [
+    index("tournament_player_snapshots_tournament_idx").on(table.tournamentId),
+    index("tournament_player_snapshots_user_idx").on(table.userId),
+    index("tournament_player_snapshots_riot_idx").on(table.riotIdNormalized),
   ],
 );
 
@@ -312,6 +401,8 @@ export const tournamentsRelations = relations(tournaments, ({ one, many }) => ({
   }),
   registrations: many(tournamentRegistrations),
   matches: many(matches),
+  standings: many(tournamentTeamStandings),
+  playerSnapshots: many(tournamentPlayerSnapshots),
 }));
 
 export const tournamentRegistrationsRelations = relations(
@@ -348,6 +439,56 @@ export const matchesRelations = relations(matches, ({ one }) => ({
     references: [teams.id],
     relationName: "match_winner",
   }),
+  nextMatch: one(matches, {
+    fields: [matches.nextMatchId],
+    references: [matches.id],
+    relationName: "match_next",
+  }),
+  loserNextMatch: one(matches, {
+    fields: [matches.loserNextMatchId],
+    references: [matches.id],
+    relationName: "match_loser_next",
+  }),
+  sourceMatchA: one(matches, {
+    fields: [matches.sourceMatchAId],
+    references: [matches.id],
+    relationName: "match_source_a",
+  }),
+  sourceMatchB: one(matches, {
+    fields: [matches.sourceMatchBId],
+    references: [matches.id],
+    relationName: "match_source_b",
+  }),
+}));
+
+export const tournamentTeamStandingsRelations = relations(tournamentTeamStandings, ({ one }) => ({
+  tournament: one(tournaments, {
+    fields: [tournamentTeamStandings.tournamentId],
+    references: [tournaments.id],
+  }),
+  team: one(teams, {
+    fields: [tournamentTeamStandings.teamId],
+    references: [teams.id],
+  }),
+  lastMatch: one(matches, {
+    fields: [tournamentTeamStandings.lastMatchId],
+    references: [matches.id],
+  }),
+}));
+
+export const tournamentPlayerSnapshotsRelations = relations(tournamentPlayerSnapshots, ({ one }) => ({
+  tournament: one(tournaments, {
+    fields: [tournamentPlayerSnapshots.tournamentId],
+    references: [tournaments.id],
+  }),
+  team: one(teams, {
+    fields: [tournamentPlayerSnapshots.teamId],
+    references: [teams.id],
+  }),
+  user: one(users, {
+    fields: [tournamentPlayerSnapshots.userId],
+    references: [users.id],
+  }),
 }));
 
 export type User = typeof users.$inferSelect;
@@ -360,3 +501,7 @@ export type TeamMember = typeof teamMembers.$inferSelect;
 export type NewTeamMember = typeof teamMembers.$inferInsert;
 export type TournamentRegistration = typeof tournamentRegistrations.$inferSelect;
 export type Match = typeof matches.$inferSelect;
+export type TournamentTeamStanding = typeof tournamentTeamStandings.$inferSelect;
+export type NewTournamentTeamStanding = typeof tournamentTeamStandings.$inferInsert;
+export type TournamentPlayerSnapshot = typeof tournamentPlayerSnapshots.$inferSelect;
+export type NewTournamentPlayerSnapshot = typeof tournamentPlayerSnapshots.$inferInsert;
