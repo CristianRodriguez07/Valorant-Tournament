@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Rajdhani } from "next/font/google";
+import { Geist, Rajdhani, Teko } from "next/font/google";
 import { Toaster } from "sonner";
 
 import "./globals.css";
@@ -15,6 +15,12 @@ const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const teko = Teko({
+  variable: "--font-teko",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -46,8 +52,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className="dark" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${rajdhani.variable}`}>
+    <html lang="es" className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${rajdhani.variable} ${teko.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark" disableTransitionOnChange>
           {children}
           <Toaster richColors position="top-right" />

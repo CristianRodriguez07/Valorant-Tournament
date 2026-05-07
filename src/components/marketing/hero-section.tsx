@@ -1,78 +1,158 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Crosshair, Play } from "lucide-react";
+import { ArrowRight, CalendarDays, Crosshair, GitFork, Globe2, LogIn, Play, Trophy } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { PrizePoolCard } from "@/components/marketing/prize-pool-card";
-import { TournamentCountdown } from "@/components/marketing/tournament-countdown";
+const railStats = [
+  ["Teams", "128"],
+  ["Rounds", "∞"],
+  ["Glory", "1"],
+] as const;
 
-const tournamentStartDate = new Date("2026-06-01T18:00:00+02:00");
+const countdown = [
+  ["07", "Days"],
+  ["14", "Hrs"],
+  ["36", "Mins"],
+  ["52", "Secs"],
+] as const;
+
+const protocols = [
+  [Crosshair, "5v5 competitive"],
+  [GitFork, "Double elimination"],
+  [Globe2, "All regions eligible"],
+] as const;
 
 export function HeroSection() {
   return (
-    <section className="relative isolate min-h-svh overflow-hidden px-6 py-8 md:px-10">
-      <video
-        className="absolute inset-0 -z-20 h-full w-full object-cover opacity-30"
-        src="/media/hero-loop.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster="/og/tournament-card.svg"
-      />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgb(255_70_85/0.28),transparent_30rem),linear-gradient(90deg,#070707_0%,rgb(17_17_17/0.88)_42%,rgb(7_7_7/0.62)_100%)]" />
-      <div className="valorant-grid absolute inset-0 -z-10 opacity-25" />
+    <section className="coded-concept-hero" aria-labelledby="coded-concept-title">
+      <div className="coded-concept-grid" aria-hidden="true" />
+      <div className="coded-concept-lines" aria-hidden="true" />
 
-      <header className="mx-auto flex max-w-7xl items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center border border-valorant-red/40 bg-valorant-red text-white shadow-valorant-glow">
-            <Crosshair className="size-5" />
-          </span>
-          <span className="text-xl font-black uppercase tracking-[0.22em] text-white">Arena</span>
+      <header className="coded-concept-topbar">
+        <Link href="/" className="coded-concept-logo" aria-label="Ignition Cup home">
+          <span className="v-mark" aria-hidden="true" />
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm font-bold uppercase tracking-[0.16em] text-zinc-400 md:flex">
-          <a href="#premios" className="hover:text-white">Premios</a>
-          <a href="#formato" className="hover:text-white">Formato</a>
-          <Link href="/dashboard" className="hover:text-white">Dashboard</Link>
+        <nav className="coded-concept-nav" aria-label="Marketing navigation">
+          <a href="#premios" className="is-active">Tournaments</a>
+          <a href="#leaderboard">Leaderboard</a>
+          <a href="#news">News</a>
+          <a href="#operaciones">About</a>
         </nav>
+
+        <div className="coded-concept-auth">
+          <Link href="/sign-in" className="coded-concept-button coded-concept-button-dark">
+            Log in <LogIn className="size-4" />
+          </Link>
+          <Link href="/register" className="coded-concept-button coded-concept-button-red">
+            Register squad <ArrowRight className="size-4" />
+          </Link>
+        </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl items-center gap-10 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:py-28">
-        <div>
-          <Badge className="mb-6 border border-valorant-red/30 bg-valorant-red/10 px-3 py-1.5 text-valorant-red">
-            <CalendarDays className="size-3.5" />
-            Inscripciones abiertas · Cupos limitados
-          </Badge>
+      <div className="coded-concept-copy">
+        <div className="coded-concept-kicker">
+          <strong>5v5</strong>
+          <span>Tactical esports tournament</span>
+        </div>
 
-          <h1 className="max-w-4xl text-balance text-5xl font-black uppercase leading-[0.92] tracking-[-0.04em] text-white md:text-7xl xl:text-8xl">
-            Valorant <span className="text-valorant-red">Ignition</span> Cup
-          </h1>
+        <h1 id="coded-concept-title" className="coded-concept-title">
+          <span>Ignition</span>
+          <span>Cup</span>
+        </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">
-            Crea tu equipo, sube tu logo, registra Riot IDs y entra al bracket. Una experiencia ultra rápida, dark mode nativo y estética competitiva premium.
+        <div className="coded-concept-legacy">
+          <span aria-hidden="true" />
+          <p>
+            Assemble your squad.
+            <br />
+            Prove your strategy.
+            <br />
+            Ignite your legacy.
           </p>
+        </div>
+      </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button asChild className="valorant-glow-button h-13 rounded-none px-8 font-black uppercase tracking-[0.18em]">
-              <Link href="/register">
-                Inscríbete ahora <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" className="h-13 rounded-none border-white/15 bg-black/30 px-8 font-black uppercase tracking-[0.18em] text-white hover:bg-white/10">
-              <a href="#formato"><Play className="size-4" /> Ver formato</a>
-            </Button>
+      <div className="coded-concept-art" aria-hidden="true">
+        <Image
+          src="/media/ignition-arena-keyart.png"
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 1024px) 56vw, 100vw"
+          className="coded-concept-art-image"
+        />
+        <div className="coded-concept-art-mark" />
+      </div>
+
+      <aside className="coded-concept-rail" aria-label="Tournament stats">
+        {railStats.map(([label, value]) => (
+          <div key={label} className="coded-concept-rail-item">
+            <span>{label}</span>
+            <strong>{value}</strong>
           </div>
+        ))}
+        <Crosshair className="coded-concept-rail-crosshair" />
+      </aside>
 
-          <div className="mt-10 max-w-xl">
-            <TournamentCountdown targetDate={tournamentStartDate} />
+      <div className="coded-concept-actions">
+        <Link href="/register" className="coded-concept-primary">
+          Register squad <ArrowRight className="size-5" />
+        </Link>
+        <a href="#formato" className="coded-concept-secondary">
+          <Play className="size-4" /> View format <ArrowRight className="size-4" />
+        </a>
+      </div>
+
+      <div className="coded-concept-hud">
+        <div className="coded-concept-countdown">
+          <div className="coded-concept-panel-title">
+            <CalendarDays className="size-5" />
+            Tournament starts in
+          </div>
+          <div className="coded-concept-count-grid">
+            {countdown.map(([value, label]) => (
+              <div key={label}>
+                <strong>{value}</strong>
+                <span>{label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        <aside id="premios" className="lg:ml-auto lg:w-full lg:max-w-md">
-          <PrizePoolCard />
-        </aside>
+        <div className="coded-concept-protocol">
+          {protocols.map(([Icon, label]) => (
+            <div key={label} className="coded-concept-protocol-row">
+              <Icon className="size-5" />
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
       </div>
+
+      <div id="premios" className="coded-concept-prize">
+        <div>
+          <div className="coded-concept-panel-title">
+            <Trophy className="size-5" />
+            Total prize pool
+          </div>
+          <div className="coded-concept-prize-amount">$25,000</div>
+          <div className="coded-concept-prize-strip">+ exclusive champion rewards</div>
+        </div>
+        <div className="coded-concept-trophy" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+
+      <footer className="coded-concept-footer">
+        <span>Ignite the field</span>
+        <span aria-hidden="true">
+          <b />
+          <b />
+          <b />
+        </span>
+      </footer>
     </section>
   );
 }

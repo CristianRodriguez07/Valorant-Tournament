@@ -25,7 +25,7 @@ export const rosterPlayerSchema = z.object({
 });
 
 const teamRegistrationCoreShape = {
-  tournamentSlug: z.string().min(1).default("valorant-ignition-cup"),
+  tournamentSlug: z.string().min(1),
   teamName: z
     .string()
     .trim()

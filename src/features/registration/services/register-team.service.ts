@@ -14,6 +14,7 @@ import { normalizeRiotId } from "@/lib/validators/riot-id";
 import { slugify } from "@/lib/utils";
 
 import type { RosterPlayerInput } from "../schemas";
+import { ACTIVE_REGISTRATION_STATUSES } from "../status";
 
 export class RegistrationError extends Error {
   constructor(message: string) {
@@ -47,6 +48,23 @@ export async function registerTeam(input: RegisterTeamInput): Promise<{ teamId: 
     const now = new Date();
     if (now < tournament.registrationOpensAt || now > tournament.registrationClosesAt) {
       throw new RegistrationError("La ventana de registro no está activa.");
+    }
+
+    const [existingActiveRegistration] = await tx
+      .select({ id: tournamentRegistrations.id })
+      .from(tournamentRegistrations)
+      .innerJoin(teams, eq(tournamentRegistrations.teamId, teams.id))
+      .where(
+        and(
+          eq(tournamentRegistrations.tournamentId, tournament.id),
+          eq(teams.captainId, input.captainId),
+          inArray(tournamentRegistrations.status, [...ACTIVE_REGISTRATION_STATUSES]),
+        ),
+      )
+      .limit(1);
+
+    if (existingActiveRegistration) {
+      throw new RegistrationError("Ya tienes una inscripción activa para este torneo.");
     }
 
     const [registrationCount] = await tx

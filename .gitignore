@@ -8,4 +8,5 @@ out
 .DS_Store
 dist
 coverage
+.superpowers/
 drizzle/meta/_journal.json

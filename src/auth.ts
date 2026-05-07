@@ -1,10 +1,9 @@
 import NextAuth from "next-auth";
-import Discord from "next-auth/providers/discord";
-import Google from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
 import { db } from "@/db";
 import { accounts, sessions, users, verificationTokens } from "@/db/schema";
+import { authProviders } from "@/lib/auth-providers";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db, {
@@ -16,7 +15,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "database",
   },
-  providers: [Discord, Google],
+  providers: authProviders,
   pages: {
     signIn: "/sign-in",
   },
